@@ -48,6 +48,6 @@ class HttpErrorHandler extends SlimErrorHandler {
         $response = $this->responseFactory->createResponse($statusCode);
         $response->getBody()->write("${statusCode}: {$error->getDescription()}");
 
-        return $response->withHeader('Content-Type', 'application/json');
+        return $response->withHeader('Content-Type', 'text/html');
     }
 }
