@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 
+use App\Actions\TestAction;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -11,10 +12,7 @@ return function (App $app) {
         return $response;
     });
 
-    $app->get('/', function (Request $request, Response $response) {
-        $response->getBody()->write('Hello world!');
-        return $response;
-    });
+    $app->get('/[{name}]', TestAction::class);
 
     $app->group('/users', function (Group $group) {
 

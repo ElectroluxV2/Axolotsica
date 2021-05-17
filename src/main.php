@@ -2,20 +2,22 @@
 
 use App\Handlers\HttpErrorHandler;
 use App\Handlers\ShutdownHandler;
+use App\Middleware\SessionMiddleware;
 use App\ResponseEmitter\ResponseEmitter;
 use App\Settings\Settings;
 use DI\ContainerBuilder;
 use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
+use Slim\Views\TwigMiddleware;
 
 require __DIR__ . '/../vendor/autoload.php';
 
 // Instantiate PHP-DI ContainerBuilder
 $containerBuilder = new ContainerBuilder();
 
-/*if (false) { // Should be set to true in production
-	$containerBuilder->enableCompilation(__DIR__ . '/../cache');
-}*/
+if (false) { // Should be set to true in production
+	$containerBuilder->enableCompilation(__DIR__ . '/../cache/phpdi');
+}
 
 // Set up settings
 $settings = require __DIR__ . '/settings.php';
@@ -34,8 +36,8 @@ $app = AppFactory::create();
 $callableResolver = $app->getCallableResolver();
 
 // Register middleware
-$middleware = require __DIR__ . '/middleware.php';
-$middleware($app);
+$app->add(SessionMiddleware::class);
+$app->add(TwigMiddleware::createFromContainer($app));
 
 // Register routes
 $routes = require __DIR__ . '/routes.php';

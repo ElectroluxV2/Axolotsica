@@ -11,13 +11,19 @@ return function (ContainerBuilder $containerBuilder) {
         Settings::class => function () {
             return new Settings([
                 'displayErrorDetails' => true, // Should be set to false in production
-                'logError'            => false,
-                'logErrorDetails'     => false,
+                'logError' => false,
+                'logErrorDetails' => false,
                 'logger' => [
-                    'name' => 'slim-app',
-                    'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
+                    'name' => 'Axolotsica',
+                    'path' => __DIR__ . '/../logs/app.log',
                     'level' => Logger::DEBUG,
                 ],
+                'twig' => [
+                    'templatesPath' => __DIR__.'/../src/Templates',
+                    'arguments' => [
+                        'cache' => __DIR__.'/../cache/twig'
+                    ]
+                ]
             ]);
         }
     ]);

@@ -1,19 +1,26 @@
 <?php declare(strict_types=1);
 namespace App\Actions;
 
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
+use Slim\Views\Twig;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 abstract class Action {
     protected LoggerInterface $logger;
+    protected Twig $twig;
     protected Request $request;
     protected Response $response;
     protected array $args;
 
-    public function __construct(LoggerInterface $logger) {
+    public function __construct(LoggerInterface $logger, ContainerInterface $container) {
         $this->logger = $logger;
+        $this->twig = $container->get("view");
     }
 
     /**
@@ -46,5 +53,14 @@ abstract class Action {
     protected function respond(string $body): Response {
         $this->response->getBody()->write($body);
         return $this->response;
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    protected function render(string $template, $data): Response {
+        return $this->twig->render($this->response, $template, $data);
     }
 }
