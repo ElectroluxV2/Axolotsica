@@ -21,7 +21,7 @@ return function (ContainerBuilder $containerBuilder) {
                 'twig' => [
                     'templatesPath' => __DIR__.'/../src/Templates',
                     'arguments' => [
-                        'cache' => __DIR__.'/../cache/twig'
+                        'cache' => false //__DIR__.'/../cache/twig'
                     ]
                 ]
             ]);

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css"/>
+    <title>{% block title %}Empty page{% endblock title %} - Axolotsica</title>
+    {% endblock head %}
+</head>
+<body>
+
+    <header>
+        <nav>
+            <ul>
+                <li>aaaa</li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block main %}
+        <h1>Unmodified</h1>
+        {% endblock main %}
+    </main>
+
+    <footer>
+        {% block footer %}
+        &copy; by <a href="mailto:electroluxv2@gmail.com">Mateusz Budzisz</a>.
+        {% endblock footer %}
+    </footer>
+</body>
+</html>
