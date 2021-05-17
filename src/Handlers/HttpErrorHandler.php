@@ -1,11 +1,7 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
+namespace App\Handlers;
 
-namespace App\Application\Handlers;
-
-use App\Application\Actions\ActionError;
-use App\Application\Actions\ActionPayload;
-use Exception;
+use App\Actions\ActionError;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpException;
@@ -17,19 +13,14 @@ use Slim\Exception\HttpUnauthorizedException;
 use Slim\Handlers\ErrorHandler as SlimErrorHandler;
 use Throwable;
 
-class HttpErrorHandler extends SlimErrorHandler
-{
+class HttpErrorHandler extends SlimErrorHandler {
     /**
      * @inheritdoc
      */
-    protected function respond(): Response
-    {
+    protected function respond(): Response {
         $exception = $this->exception;
         $statusCode = 500;
-        $error = new ActionError(
-            ActionError::SERVER_ERROR,
-            'An internal error has occurred while processing your request.'
-        );
+        $error = new ActionError(ActionError::SERVER_ERROR,'An internal error has occurred while processing your request.');
 
         if ($exception instanceof HttpException) {
             $statusCode = $exception->getCode();
@@ -50,19 +41,12 @@ class HttpErrorHandler extends SlimErrorHandler
             }
         }
 
-        if (
-            !($exception instanceof HttpException)
-            && $exception instanceof Throwable
-            && $this->displayErrorDetails
-        ) {
+        if (!($exception instanceof HttpException) && $exception instanceof Throwable && $this->displayErrorDetails) {
             $error->setDescription($exception->getMessage());
         }
 
-        $payload = new ActionPayload($statusCode, null, $error);
-        $encodedPayload = json_encode($payload, JSON_PRETTY_PRINT);
-
         $response = $this->responseFactory->createResponse($statusCode);
-        $response->getBody()->write($encodedPayload);
+        $response->getBody()->write("${statusCode}: {$error->getDescription()}");
 
         return $response->withHeader('Content-Type', 'application/json');
     }

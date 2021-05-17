@@ -1,18 +1,14 @@
-<?php
-declare(strict_types=1);
-
-namespace App\Application\ResponseEmitter;
+<?php declare(strict_types=1);
+namespace App\ResponseEmitter;
 
 use Psr\Http\Message\ResponseInterface;
 use Slim\ResponseEmitter as SlimResponseEmitter;
 
-class ResponseEmitter extends SlimResponseEmitter
-{
+class ResponseEmitter extends SlimResponseEmitter {
     /**
      * {@inheritdoc}
      */
-    public function emit(ResponseInterface $response): void
-    {
+    public function emit(ResponseInterface $response): void {
         // This variable should be set to the allowed host from which your API can be accessed with
         $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
 

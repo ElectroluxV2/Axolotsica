@@ -1,48 +1,22 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
+namespace App\Handlers;
 
-namespace App\Application\Handlers;
-
-use App\Application\ResponseEmitter\ResponseEmitter;
+use App\ResponseEmitter\ResponseEmitter;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpInternalServerErrorException;
 
-class ShutdownHandler
-{
-    /**
-     * @var Request
-     */
-    private $request;
+class ShutdownHandler {
+    private Request $request;
+    private HttpErrorHandler $errorHandler;
+    private bool $displayErrorDetails;
 
-    /**
-     * @var HttpErrorHandler
-     */
-    private $errorHandler;
-
-    /**
-     * @var bool
-     */
-    private $displayErrorDetails;
-
-    /**
-     * ShutdownHandler constructor.
-     *
-     * @param Request           $request
-     * @param HttpErrorHandler  $errorHandler
-     * @param bool              $displayErrorDetails
-     */
-    public function __construct(
-        Request $request,
-        HttpErrorHandler $errorHandler,
-        bool $displayErrorDetails
-    ) {
+    public function __construct(Request $request, HttpErrorHandler $errorHandler, bool $displayErrorDetails) {
         $this->request = $request;
         $this->errorHandler = $errorHandler;
         $this->displayErrorDetails = $displayErrorDetails;
     }
 
-    public function __invoke()
-    {
+    public function __invoke() {
         $error = error_get_last();
         if ($error) {
             $errorFile = $error['file'];
