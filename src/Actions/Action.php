@@ -18,9 +18,9 @@ abstract class Action {
     protected Response $response;
     protected array $args;
 
-    public function __construct(LoggerInterface $logger, ContainerInterface $container) {
+    public function __construct(LoggerInterface $logger, Twig $twig) {
         $this->logger = $logger;
-        $this->twig = $container->get("view");
+        $this->twig = $twig;
     }
 
     /**

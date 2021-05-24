@@ -1,5 +1,9 @@
 <?php declare(strict_types=1);
 
+ini_set('display_errors', "1");
+ini_set('display_startup_errors', "1");
+error_reporting(E_ALL);
+
 use App\Handlers\HttpErrorHandler;
 use App\Handlers\ShutdownHandler;
 use App\Middleware\SessionMiddleware;
@@ -8,6 +12,7 @@ use App\Settings\Settings;
 use DI\ContainerBuilder;
 use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
+use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -37,7 +42,7 @@ $callableResolver = $app->getCallableResolver();
 
 // Register middleware
 $app->add(SessionMiddleware::class);
-$app->add(TwigMiddleware::createFromContainer($app));
+
 
 // Register routes
 $routes = require __DIR__ . '/routes.php';
@@ -56,7 +61,7 @@ $request = $serverRequestCreator->createServerRequestFromGlobals();
 
 // Create Error Handler
 $responseFactory = $app->getResponseFactory();
-$errorHandler = new HttpErrorHandler($callableResolver, $responseFactory, $container);
+$errorHandler = new HttpErrorHandler($callableResolver, $responseFactory, $container->get(Twig::class));
 
 // Create Shutdown Handler
 $shutdownHandler = new ShutdownHandler($request, $errorHandler, $displayErrorDetails);
@@ -68,6 +73,9 @@ $app->addRoutingMiddleware();
 // Add Error Middleware
 $errorMiddleware = $app->addErrorMiddleware($displayErrorDetails, $logError, $logErrorDetails);
 $errorMiddleware->setDefaultErrorHandler($errorHandler);
+
+// ITS SUPER IMPORTANT TO ADD THIS MIDDLEWARE AFTER ERROR MIDDLEWARE!!!
+$app->add(TwigMiddleware::createFromContainer($app, Twig::class));
 
 // Run App & Emit Response
 $response = $app->handle($request);

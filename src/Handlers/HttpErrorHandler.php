@@ -24,9 +24,9 @@ use Twig\Error\SyntaxError;
 class HttpErrorHandler extends SlimErrorHandler {
     protected Twig $twig;
 
-    public function __construct(CallableResolverInterface $callableResolver, ResponseFactoryInterface $responseFactory, ContainerInterface $container, ?LoggerInterface $logger = null) {
+    public function __construct(CallableResolverInterface $callableResolver, ResponseFactoryInterface $responseFactory, Twig $twig, ?LoggerInterface $logger = null) {
         parent::__construct($callableResolver, $responseFactory, $logger);
-        $this->twig = $container->get("view");
+        $this->twig = $twig;
     }
 
     /**
@@ -63,7 +63,7 @@ class HttpErrorHandler extends SlimErrorHandler {
         $response = $this->responseFactory->createResponse($statusCode);
 
         try {
-            return $this->twig->render($response, "error.html", [
+            return $this->twig->render($response, "error.twig", [
                 "code" => $statusCode,
                 "message" => $error->getDescription()
             ]);

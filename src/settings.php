@@ -13,7 +13,7 @@ return function (ContainerBuilder $containerBuilder) {
         Settings::class => function () {
             return new Settings([
                 'displayErrorDetails' => true, // Should be set to false in production
-                'logError' => false,
+                'logError' => true,
                 'logErrorDetails' => false,
                 'logger' => [
                     'name' => 'Axolotsica',

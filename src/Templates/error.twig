@@ -1,0 +1,11 @@
+{% extends "layout.twig" %}
+
+{% block main %}
+
+<div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading"><svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>An error occurred</h4>
+    <code>{{ code }}</code>
+    <hr/>
+    <p class="mb-0">{{ message }}</p>
+</div>
+{% endblock main %}
