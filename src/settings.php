@@ -2,7 +2,9 @@
 
 use App\Settings\Settings;
 use DI\ContainerBuilder;
+use Medoo\Medoo;
 use Monolog\Logger;
+use Slim\Views\Twig;
 
 return function (ContainerBuilder $containerBuilder) {
 
@@ -17,12 +19,17 @@ return function (ContainerBuilder $containerBuilder) {
                     'name' => 'Axolotsica',
                     'path' => __DIR__ . '/../logs/app.log',
                     'level' => Logger::DEBUG,
-                ],
-                'twig' => [
+                ], Twig::class => [
                     'templatesPath' => __DIR__.'/../src/Templates',
                     'arguments' => [
                         'cache' => false //__DIR__.'/../cache/twig'
                     ]
+                ], Medoo::class => [
+                    'type' => 'mysql',
+                    'host' => 'localhost',
+                    'database' => 'name',
+                    'username' => 'your_username',
+                    'password' => 'your_password',
                 ]
             ]);
         }

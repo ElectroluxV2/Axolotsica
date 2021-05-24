@@ -2,6 +2,7 @@
 
 use App\Settings\Settings;
 use DI\ContainerBuilder;
+use Medoo\Medoo;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
@@ -26,8 +27,11 @@ return function (ContainerBuilder $containerBuilder) {
             return $logger;
         }, 'view' => function (ContainerInterface $c) {
             $settings = $c->get(Settings::class);
-            $twigSettings = $settings->get("twig");
+            $twigSettings = $settings->get(Twig::class);
             return Twig::create($twigSettings["templatesPath"], $twigSettings["arguments"]);
+        }, Medoo::class => function (ContainerInterface $c) {
+            $settings = $c->get(Settings::class);
+            return new Medoo($settings->get(Medoo::class));
         }
     ]);
 };
