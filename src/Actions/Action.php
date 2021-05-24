@@ -60,7 +60,7 @@ abstract class Action {
      * @throws RuntimeError
      * @throws LoaderError
      */
-    protected function render(string $template, $data): Response {
+    protected function render(string $template, $data = []): Response {
         return $this->twig->render($this->response, $template, $data);
     }
 }
