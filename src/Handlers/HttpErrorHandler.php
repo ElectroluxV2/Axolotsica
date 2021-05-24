@@ -2,7 +2,10 @@
 namespace App\Handlers;
 
 use App\Actions\ActionError;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpException;
 use Slim\Exception\HttpForbiddenException;
@@ -11,9 +14,21 @@ use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpNotImplementedException;
 use Slim\Exception\HttpUnauthorizedException;
 use Slim\Handlers\ErrorHandler as SlimErrorHandler;
+use Slim\Interfaces\CallableResolverInterface;
+use Slim\Views\Twig;
 use Throwable;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class HttpErrorHandler extends SlimErrorHandler {
+    protected Twig $twig;
+
+    public function __construct(CallableResolverInterface $callableResolver, ResponseFactoryInterface $responseFactory, ContainerInterface $container, ?LoggerInterface $logger = null) {
+        parent::__construct($callableResolver, $responseFactory, $logger);
+        $this->twig = $container->get("view");
+    }
+
     /**
      * @inheritdoc
      */
@@ -46,8 +61,14 @@ class HttpErrorHandler extends SlimErrorHandler {
         }
 
         $response = $this->responseFactory->createResponse($statusCode);
-        $response->getBody()->write("${statusCode}: {$error->getDescription()}");
 
-        return $response->withHeader('Content-Type', 'text/html');
+        try {
+            return $this->twig->render($response, "error.html", [
+                "code" => $statusCode,
+                "message" => $error->getDescription()
+            ]);
+        } catch (LoaderError | RuntimeError | SyntaxError $e) {
+            die("An error occurred: {$e->getMessage()}.");
+        }
     }
 }
