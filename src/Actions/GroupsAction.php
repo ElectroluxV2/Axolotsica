@@ -17,6 +17,6 @@ class GroupsAction extends Action {
      */
     protected function action(): Response {
         // TODO: Implement action() method.
-        return $this->render("groups.twig", []);
+        return $this->render("groups-list.twig", []);
     }
 }

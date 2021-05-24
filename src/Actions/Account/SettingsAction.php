@@ -1,25 +1,21 @@
 <?php declare(strict_types=1);
-namespace App\Actions;
+namespace App\Actions\Account;
 
+use App\Actions\Action;
 use Psr\Http\Message\ResponseInterface as Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class HomeAction extends Action {
+class SettingsAction extends Action {
 
     /**
-     * @throws RuntimeError
      * @throws SyntaxError
+     * @throws RuntimeError
      * @throws LoaderError
      */
     protected function action(): Response {
         // TODO: Implement action() method.
-
-        if ($_SESSION["logged_in"]) {
-            return $this->render("home.twig");
-        }
-
-        return $this->render("account-sign-in.twig");
+        return $this->render("account-settings.twig", []);
     }
 }

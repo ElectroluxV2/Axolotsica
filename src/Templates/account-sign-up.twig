@@ -1,0 +1,32 @@
+
+{% extends "layout.twig" %}
+
+{% block main %}
+  <main>
+
+    <h1>Create new account.</h1>
+
+    <form action="account/sign-up" method="post">
+      <div class="row g-2">
+        <div class="col-md form-floating">
+
+          <input type="email" class="form-control bg-dark text-white" id="email" placeholder="name@example.com" required/>
+          <label for="email">Email</label>
+
+        </div>
+        <div class="col-md form-floating">
+
+          <input type="password" class="form-control bg-dark text-white" id="password" placeholder="dadada" required/>
+          <label for="password">Password</label>
+
+        </div>
+      </div>
+      <div class="container">
+        <input type="submit" class="btn btn-dark btn-lg btn-outline-primary m-3" value="Sign up"/>
+        <input type="submit" formaction="account/sign-in" class="btn btn-dark btn-lg btn-outline-secondary m-3" value="Sign in"/>
+      </div>
+    </form>
+
+  </main>
+
+{% endblock main %}

@@ -7,15 +7,17 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class AccountSettingsAction extends Action {
+class SignOutAction extends Action {
 
     /**
+     * @inheritDoc
+     * @return Response
      * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
+     * @throws RuntimeError
      */
     protected function action(): Response {
         // TODO: Implement action() method.
-        return $this->render("account-settings.twig", []);
+        return $this->render("account-sign-out.twig", []);
     }
 }

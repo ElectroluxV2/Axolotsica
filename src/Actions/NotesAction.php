@@ -17,6 +17,6 @@ class NotesAction extends Action {
      */
     protected function action(): Response {
         // TODO: Implement action() method.
-        return $this->render("notes.twig", []);
+        return $this->render("notes-list.twig", []);
     }
 }
