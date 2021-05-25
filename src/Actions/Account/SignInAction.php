@@ -17,7 +17,18 @@ class SignInAction extends Action {
      * @throws RuntimeError
      */
     protected function action(): Response {
-        // TODO: Implement action() method.
-        return $this->render("account-sign-in.twig", []);
+        $data = $this->request->getParsedBody() ?? [];
+        $errors = ["show_valid" => true];
+
+        if (!isset($data["email"]) || empty($data["email"])) $errors["email_error"] = "Please enter email";
+        if (!filter_var($data["email"], FILTER_VALIDATE_EMAIL)) $errors["email_error"] = "Email in not valid";
+        if (!isset($data["password"]) || empty($data["password"])) $errors["password_error"] = "Please enter password";
+
+        if ($this->request->getMethod() === "GET") {
+            // Do not display errors when form was only requested to show
+            $errors = [];
+        }
+
+        return $this->render("account-sign-in.twig", $data + $errors);
     }
 }

@@ -1,4 +1,3 @@
-
 {% extends "layout.twig" %}
 
 {% block main %}
@@ -6,24 +5,26 @@
 
     <h1>Sign in to your account.</h1>
 
-    <form action="account/sign-in" method="post">
+    <form action="{{ full_url_for('Account Sign In') }}" method="post" novalidate>
       <div class="row g-2">
         <div class="col-md form-floating">
 
-          <input type="email" class="form-control bg-dark text-white" id="email" placeholder="name@example.com" required/>
+          <input type="email" name="email" class="form-control bg-dark text-white {% if email_error is not empty %}is-invalid{% elseif show_valid %}is-valid{% endif %}" id="email" value="{{ email }}" required/>
           <label for="email">Email</label>
+          <div class="invalid-feedback">{{ email_error }}</div>
 
         </div>
         <div class="col-md form-floating">
 
-          <input type="password" class="form-control bg-dark text-white" id="password" placeholder="dadada" required/>
+          <input type="password" name="password" class="form-control bg-dark text-white {% if password_error is not empty %}is-invalid{% elseif show_valid %}is-valid{% endif %}" id="password" value="{{ password }}" required/>
           <label for="password">Password</label>
+          <div class="invalid-feedback">{{ password_error }}</div>
 
         </div>
       </div>
       <div class="container">
         <input type="submit" class="btn btn-dark btn-lg btn-outline-primary m-3" value="Sign in"/>
-        <input type="submit" formaction="account/sign-up" class="btn btn-dark btn-lg btn-outline-secondary m-3" value="Sign up"/>
+        <input type="submit" formaction="{{ full_url_for('Account Sign Up') }}" class="btn btn-dark btn-lg btn-outline-secondary m-3" value="Sign up"/>
       </div>
     </form>
 

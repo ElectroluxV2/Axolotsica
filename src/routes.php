@@ -6,6 +6,7 @@ use App\Actions\Account\SignOutAction;
 use App\Actions\Account\SignUpAction;
 use App\Actions\GroupsAction;
 use App\Actions\HomeAction;
+use App\Actions\InstallAction;
 use App\Actions\NotesAction;
 use App\Actions\TestAction;
 use Slim\App;
@@ -21,12 +22,14 @@ return function (App $app) {
 
     $app->get('/test/[{name}]', TestAction::class)->setName('Test');
 
+    $app->get('/install', InstallAction::class)->setName('Install');
+
     $app->group('/account', function (Group $group) {
         $group->get('/settings', SettingsAction::class)->setName('Account Settings');
 
-        $group->get('/sign-in', SignInAction::class)->setName('Account Sign In');
+        $group->map(['POST', 'GET'],'/sign-in', SignInAction::class)->setName('Account Sign In');
 
-        $group->get('/sign-up', SignUpAction::class)->setName('Account Sign Up');
+        $group->map(['POST', 'GET'],'/sign-up', SignUpAction::class)->setName('Account Sign Up');
 
         $group->get('/sign-out', SignOutAction::class)->setName('Account Sign Out');
     });

@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace App\Actions;
 
+use Medoo\Medoo;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -14,13 +15,15 @@ use Twig\Error\SyntaxError;
 abstract class Action {
     protected LoggerInterface $logger;
     protected Twig $twig;
+    protected Medoo $medoo;
     protected Request $request;
     protected Response $response;
     protected array $args;
 
-    public function __construct(LoggerInterface $logger, Twig $twig) {
+    public function __construct(LoggerInterface $logger, Twig $twig, Medoo $medoo) {
         $this->logger = $logger;
         $this->twig = $twig;
+        $this->medoo = $medoo;
     }
 
     /**

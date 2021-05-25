@@ -43,7 +43,6 @@ $callableResolver = $app->getCallableResolver();
 // Register middleware
 $app->add(SessionMiddleware::class);
 
-
 // Register routes
 $routes = require __DIR__ . '/routes.php';
 $routes($app);

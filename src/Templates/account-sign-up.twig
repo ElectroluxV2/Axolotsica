@@ -1,4 +1,3 @@
-
 {% extends "layout.twig" %}
 
 {% block main %}
@@ -6,26 +5,86 @@
 
     <h1>Create new account.</h1>
 
-    <form action="account/sign-up" method="post">
+    <form action="{{ full_url_for('Account Sign Up') }}" method="post" novalidate>
       <div class="row g-2">
         <div class="col-md form-floating">
 
-          <input type="email" class="form-control bg-dark text-white" id="email" placeholder="name@example.com" required/>
+          <input type="email" name="email" class="form-control bg-dark text-white {% if email_error is not empty %}is-invalid{% elseif show_valid %}is-valid{% endif %}" id="email" value="{{ email }}" required/>
           <label for="email">Email</label>
+          <div class="invalid-feedback">{{ email_error }}</div>
 
         </div>
         <div class="col-md form-floating">
 
-          <input type="password" class="form-control bg-dark text-white" id="password" placeholder="dadada" required/>
-          <label for="password">Password</label>
+          <input type="email" name="email_repeat" class="form-control bg-dark text-white {% if email_repeat_error is not empty %}is-invalid{% elseif show_valid %}is-valid{% endif %}" id="email_repeat" value="{{ email_repeat }}" required/>
+          <label for="email_repeat">Repeat email</label>
+          <div class="invalid-feedback">{{ email_repeat_error }}</div>
 
         </div>
       </div>
-      <div class="container">
-        <input type="submit" class="btn btn-dark btn-lg btn-outline-primary m-3" value="Sign up"/>
-        <input type="submit" formaction="account/sign-in" class="btn btn-dark btn-lg btn-outline-secondary m-3" value="Sign in"/>
+      <div class="row g-2 pt-2">
+        <div class="col-md form-floating">
+
+          <input type="password" name="password" class="form-control bg-dark text-white {% if password_error is not empty %}is-invalid{% elseif show_valid %}is-valid{% endif %}" id="password" value="{{ password }}" required/>
+          <label for="password">Password</label>
+          <div class="invalid-feedback">{{ password_error }}</div>
+
+        </div>
+        <div class="col-md form-floating">
+
+          <input type="password" name="password_repeat" class="form-control bg-dark text-white {% if password_repeat_error is not empty %}is-invalid{% elseif show_valid %}is-valid{% endif %}" id="password_repeat" value="{{ password_repeat }}" required/>
+          <label for="password_repeat">Repeat password</label>
+          <div class="invalid-feedback">{{ password_repeat_error }}</div>
+
+        </div>
+      </div>
+      <div class="row g-2 pt-2">
+        <div class="col-md form-floating">
+
+          <input type="text" name="given_name" class="form-control bg-dark text-white {% if given_name_error is not empty %}is-invalid{% elseif show_valid %}is-valid{% endif %}" id="given_name" value="{{ given_name }}" required/>
+          <label for="given_name">Given name</label>
+          <div class="invalid-feedback">{{ given_name_error }}</div>
+
+        </div>
+        <div class="col-md form-floating">
+
+          <input type="text" name="family_name" class="form-control bg-dark text-white {% if family_name_error is not empty %}is-invalid{% elseif show_valid %}is-valid{% endif %}" id="family_name" value="{{ family_name }}" required/>
+          <label for="family_name">Family name</label>
+          <div class="invalid-feedback">{{ family_name_error }}</div>
+
+        </div>
+      </div>
+      <div class="row g-2 pt-2">
+        <div class="col-sm">
+          <input type="submit" class="btn btn-dark btn-lg btn-outline-primary" value="Sign up"/>
+        </div>
+        <div class="col-sm">
+          <input type="submit" formaction="{{ full_url_for('Account Sign In') }}" class="btn btn-dark btn-lg btn-outline-secondary" value="Sign in"/>
+        </div>
       </div>
     </form>
+
+    <script>
+      (function () {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                  form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                      event.preventDefault()
+                      event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                  }, false)
+                })
+      })()
+    </script>
 
   </main>
 

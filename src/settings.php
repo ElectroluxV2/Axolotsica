@@ -26,10 +26,10 @@ return function (ContainerBuilder $containerBuilder) {
                     ]
                 ], Medoo::class => [
                     'type' => 'mysql',
-                    'host' => 'localhost',
-                    'database' => 'name',
-                    'username' => 'your_username',
-                    'password' => 'your_password',
+                    'database' => 'daxkwtiqox_pjswtk',
+                    'host' => 's118.linuxpl.com',
+                    'username' => 'daxkwtiqox_pjswtk',
+                    'password' => 'Y0b#N-T6j*-1gR^m',
                 ]
             ]);
         }
