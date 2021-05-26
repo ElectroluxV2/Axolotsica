@@ -26,7 +26,6 @@ class InstallAction extends Action {
             "primary key (<user_id>)"
         ]);
 
-
         return $this->render("install.twig", [
 
         ]);
