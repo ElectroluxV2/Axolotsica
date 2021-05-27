@@ -27,7 +27,7 @@ return function (ContainerBuilder $containerBuilder) {
                 ], Medoo::class => [
                     'type' => 'mysql',
                     'database' => 'daxkwtiqox_pjswtk',
-                    'host' => 's118.linuxpl.com',
+                    'host' => $_SERVER['REMOTE_ADDR'] === '127.0.0.1' ? 's118.linuxpl.com' : 'localhost',
                     'username' => 'daxkwtiqox_pjswtk',
                     'password' => 'Y0b#N-T6j*-1gR^m',
                 ]
