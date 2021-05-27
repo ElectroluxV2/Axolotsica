@@ -21,7 +21,7 @@ class SignInAction extends Action {
         $errors = ["show_valid" => true];
 
         if (!$this->formatCheck($data, $errors)) {
-            $this->logger->warning("User failed to provide well formatted data during sign in");
+            if (!empty($data)) $this->logger->warning("User failed to provide well formatted data during sign in");
         } else if (!$this->loginUser($data, $errors)) {
             $this->logger->warning("User failed to login");
         } else {
