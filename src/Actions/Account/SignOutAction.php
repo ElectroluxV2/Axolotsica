@@ -3,21 +3,19 @@ namespace App\Actions\Account;
 
 use App\Actions\Action;
 use Psr\Http\Message\ResponseInterface as Response;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
+use Slim\Routing\RouteContext;
 
 class SignOutAction extends Action {
 
     /**
      * @inheritDoc
      * @return Response
-     * @throws SyntaxError
-     * @throws LoaderError
-     * @throws RuntimeError
      */
     protected function action(): Response {
-        // TODO: Implement action() method.
-        return $this->render("account-sign-out.twig", []);
+        session_unset();
+
+        // Forward to home
+        return $this->response->withHeader("Location", RouteContext::fromRequest($this->request)->getRouteParser()->urlFor("Home"))->withStatus(302);
+
     }
 }

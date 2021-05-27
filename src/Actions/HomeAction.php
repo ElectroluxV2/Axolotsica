@@ -16,10 +16,6 @@ class HomeAction extends Action {
     protected function action(): Response {
         // TODO: Implement action() method.
 
-        if ($_SESSION["logged_in"]) {
-            return $this->render("home.twig");
-        }
-
-        return $this->render("account-sign-in.twig");
+        return $this->render("home.twig", $_SESSION["user"]);
     }
 }

@@ -13,7 +13,6 @@ class SessionMiddleware implements Middleware {
     public function process(Request $request, RequestHandler $handler): Response {
         if (session_status() == PHP_SESSION_NONE){
             session_start();
-            $_SESSION["logged_in"] = false;
         }
 
         return $handler->handle($request);

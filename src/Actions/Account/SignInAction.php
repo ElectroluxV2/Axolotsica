@@ -3,6 +3,7 @@ namespace App\Actions\Account;
 
 use App\Actions\Action;
 use Psr\Http\Message\ResponseInterface as Response;
+use Slim\Routing\RouteContext;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -25,7 +26,14 @@ class SignInAction extends Action {
         } else if (!$this->loginUser($data, $errors)) {
             $this->logger->warning("User failed to login");
         } else {
-            return $this->render("account-logged-in.twig");
+            // Back to requested page
+            if (isset($_SESSION["forward_to"])) {
+                $this->logger->info("Found forward to ${_SESSION["forward_to"]}, forwarding");
+                return $this->response->withHeader("Location", $_SESSION["forward_to"])->withStatus(302);
+            }
+
+            // Forward to home
+            return $this->response->withHeader("Location", RouteContext::fromRequest($this->request)->getRouteParser()->urlFor("Home"))->withStatus(302);
         }
 
         if ($this->request->getMethod() === "GET") {
@@ -38,7 +46,7 @@ class SignInAction extends Action {
 
     private function formatCheck(Array $data, Array& $errors): bool {
         if (!isset($data["email"]) || empty($data["email"])) $errors["email_error"] = "Please enter email";
-        if (!filter_var($data["email"], FILTER_VALIDATE_EMAIL)) $errors["email_error"] = "Email in not valid";
+        if (isset($data["email"]) && !filter_var($data["email"], FILTER_VALIDATE_EMAIL)) $errors["email_error"] = "Email is not valid";
         if (!isset($data["password"]) || empty($data["password"])) $errors["password_error"] = "Please enter password";
 
         return count($errors) === 1;
