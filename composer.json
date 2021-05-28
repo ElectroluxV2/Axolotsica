@@ -11,6 +11,7 @@
         "php": "^8.0",
         "ext-json": "*",
         "catfan/medoo": "2.0.1",
+        "minishlink/web-push": "^6.0",
         "monolog/monolog": "2.2.0",
         "php-di/php-di": "6.3.3",
         "slim/psr7": "1.4",
