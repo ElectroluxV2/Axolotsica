@@ -3,6 +3,7 @@
 use App\Settings\Settings;
 use DI\ContainerBuilder;
 use Medoo\Medoo;
+use Minishlink\WebPush\WebPush;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
@@ -32,6 +33,8 @@ return function (ContainerBuilder $containerBuilder) {
         }, Medoo::class => function (ContainerInterface $c) {
             $settings = $c->get(Settings::class);
             return new Medoo($settings->get(Medoo::class));
+        }, WebPush::class => function (ContainerInterface $c) {
+            return new WebPush();
         }
     ]);
 };
