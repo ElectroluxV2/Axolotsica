@@ -3,6 +3,7 @@
 use App\Settings\Settings;
 use DI\ContainerBuilder;
 use Medoo\Medoo;
+use Minishlink\WebPush\WebPush;
 use Monolog\Logger;
 use Slim\Views\Twig;
 
@@ -26,10 +27,16 @@ return function (ContainerBuilder $containerBuilder) {
                     ]
                 ], Medoo::class => [
                     'type' => 'mysql',
-                    'database' => 'daxkwtiqox_pjswtk',
-                    'host' => $_SERVER['REMOTE_ADDR'] === '127.0.0.1' ? 's118.linuxpl.com' : 'localhost',
-                    'username' => 'daxkwtiqox_pjswtk',
-                    'password' => 'Y0b#N-T6j*-1gR^m',
+                    'database' => file_get_contents(__DIR__ . '/Settings/sql_database.txt'),
+                    'host' => $_SERVER['REMOTE_ADDR'] === '127.0.0.1' ? file_get_contents(__DIR__ . '/Settings/sql_host.txt') : 'localhost',
+                    'username' => file_get_contents(__DIR__ . '/Settings/sql_username.txt'),
+                    'password' => file_get_contents(__DIR__ . '/Settings/sql_password.txt'),
+                ], WebPush::class => [
+                    'VAPID' => array(
+                        'subject' => 'https://wpr.budziszm.pl/',
+                        'publicKey' => file_get_contents(__DIR__ . '/Settings/vapid_public_key.txt'), // don't forget that your public key also lives in app.js
+                        'privateKey' => file_get_contents(__DIR__ . '/Settings/vapid_private_key.txt'), // in the real world, this would be in a secret file
+                    ),
                 ]
             ]);
         }
