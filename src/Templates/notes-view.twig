@@ -1,0 +1,30 @@
+{% extends "layout.twig" %}
+
+{% block title %}
+    {{ name }}
+{% endblock title %}
+
+{% block head %}
+    <style>
+        article > * {
+            max-width: fit-content !important;
+            background-color: transparent !important;
+        }
+
+    </style>
+{% endblock head %}
+
+{% block main %}
+
+    <main class="container m-4">
+        <h1>{{ name }}</h1>
+        <small>By {{ owner.given_name }} {{ owner.family_name }}</small>
+        <article class="pt-3 pb-5 mw-100">
+            {% autoescape %}
+            {{ content | raw }}
+            {% endautoescape %}
+
+        </article>
+    </main>
+
+{% endblock main %}

@@ -14,6 +14,7 @@ use App\Actions\InstallAction;
 use App\Actions\Notes\NotesCreateAction;
 use App\Actions\Notes\NotesDeleteAction;
 use App\Actions\Notes\NotesListAction;
+use App\Actions\Notes\NotesViewAction;
 use App\Actions\TestAction;
 use App\Middleware\RequireAccountMiddleware;
 use Psr\Log\LoggerInterface;
@@ -45,6 +46,8 @@ return function (App $app) {
         $notes->map(['POST', 'GET'],'/create', NotesCreateAction::class)->setName('Notes Create');
 
         $notes->post('/delete', NotesDeleteAction::class)->setName('Notes Delete');
+
+        $notes->get('/view/{note_id}/{note_name}', NotesViewAction::class)->setName('Notes View');
 
     })->addMiddleware($ram);
 

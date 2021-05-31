@@ -28,7 +28,7 @@ class NotesCreateAction extends Action {
             $this->medoo->insert("notes", [
                 "owner_id" => $_SESSION["user"]["user_id"],
                 "name" => filter_var($data["name"], FILTER_SANITIZE_STRING),
-                "content" => $this->removeTag($data["content"])
+                "content" => $this->removeScriptTag($data["content"])
             ]);
 
             if ($this->medoo->error !== null) {
@@ -82,7 +82,7 @@ class NotesCreateAction extends Action {
         return $text;
     }
 
-    private function removeTag(string $html): string {
+    private function removeScriptTag(string $html): string {
         $doc = new DOMDocument();
 
         // load the HTML string we want to strip
