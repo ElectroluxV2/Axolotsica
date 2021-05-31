@@ -1,5 +1,31 @@
 {% extends "layout.twig" %}
 
+{% block title %}
+
+    Create new group
+
+{% endblock title %}
+
 {% block main %}
-    Groups create
+    <main>
+
+        <h1>Create new group</h1>
+
+        <form action="{{ full_url_for('Groups Create') }}" method="post" novalidate>
+            <div class="row g-2">
+                <div class="col-md form-floating">
+
+                    <input type="text" name="name" class="form-control bg-dark text-white {% if name_error is not empty %}is-invalid{% elseif show_valid %}is-valid{% endif %}" id="name" value="{{ name }}" required/>
+                    <label for="name">Name</label>
+                    <div class="invalid-feedback">{{ name_error }}</div>
+
+                </div>
+            </div>
+            <div class="container">
+                <input type="submit" class="btn btn-dark btn-lg btn-outline-primary m-3" value="Create"/>
+            </div>
+        </form>
+
+    </main>
+
 {% endblock main %}

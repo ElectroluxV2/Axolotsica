@@ -1,5 +1,15 @@
 {% extends "layout.twig" %}
 
+{% block title %}
+    Groups
+{% endblock title %}
+
 {% block main %}
-    Groups list
+
+    ..
+
+    <main class="container">
+        <a href="{{ full_url_for('Groups Create') }}" class="btn btn-info" role="button">Create new</a>
+    </main>
+
 {% endblock main %}

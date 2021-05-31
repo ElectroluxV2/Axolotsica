@@ -2,7 +2,6 @@
 namespace App\Handlers;
 
 use App\Actions\ActionError;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Log\LoggerInterface;

@@ -1,22 +1,27 @@
 <?php declare(strict_types=1);
-namespace App\Actions;
+namespace App\Actions\Groups;
 
+use App\Actions\Action;
 use Psr\Http\Message\ResponseInterface as Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class TestAction extends Action {
-
+class GroupsDeleteAction extends Action {
 
     /**
+     * @inheritDoc
+     * @return Response
      * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
+     * @throws RuntimeError
      */
     protected function action(): Response {
-        return $this->render("test.html", [
-           "name" => $this->args["name"] ?? "n\a"
+
+
+        // TODO: Implement action() method.
+        return $this->render("groups-delete.twig", [
+
         ]);
     }
 }

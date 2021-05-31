@@ -4,7 +4,11 @@ use App\Actions\Account\SettingsAction;
 use App\Actions\Account\SignInAction;
 use App\Actions\Account\SignOutAction;
 use App\Actions\Account\SignUpAction;
-use App\Actions\GroupsAction;
+use App\Actions\Groups\GroupsCreateAction;
+use App\Actions\Groups\GroupsDeleteAction;
+use App\Actions\Groups\GroupsListAction;
+use App\Actions\Groups\GroupsSettingsAction;
+use App\Actions\Groups\GroupsViewAction;
 use App\Actions\HomeAction;
 use App\Actions\InstallAction;
 use App\Actions\NotesAction;
@@ -13,7 +17,6 @@ use App\Middleware\RequireAccountMiddleware;
 use Psr\Log\LoggerInterface;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
-use Slim\Logger;
 
 return function (App $app) {
 
@@ -21,7 +24,18 @@ return function (App $app) {
 
     $app->get('/', HomeAction::class)->setName('Home')->addMiddleware($ram);
 
-    $app->get('/groups', GroupsAction::class)->setName('Groups')->addMiddleware($ram);
+    $app->group('/groups', function (Group $groups) {
+        $groups->get('', GroupsListAction::class)->setName('Groups List');
+
+        $groups->map(['POST', 'GET'],'/create', GroupsCreateAction::class)->setName('Groups Create');
+
+        $groups->post('/delete', GroupsDeleteAction::class)->setName('Groups Delete');
+
+        $groups->map(['POST', 'GET'], '/settings', GroupsSettingsAction::class)->setName('Groups Settings');
+
+        $groups->get('/view/{group_id}/{group_name}', GroupsViewAction::class)->setName('Groups View');
+
+    })->addMiddleware($ram);
 
     $app->get('/notes', NotesAction::class)->setName('Notes')->addMiddleware($ram);
 
@@ -29,14 +43,14 @@ return function (App $app) {
 
     $app->get('/install', InstallAction::class)->setName('Install');
 
-    $app->group('/account', function (Group $group) use ($ram) {
-        $group->get('/settings', SettingsAction::class)->setName('Account Settings');
+    $app->group('/account', function (Group $account) use ($ram) {
+        $account->get('/settings', SettingsAction::class)->setName('Account Settings');
 
-        $group->map(['POST', 'GET'],'/sign-in', SignInAction::class)->setName('Account Sign In');
+        $account->map(['POST', 'GET'],'/sign-in', SignInAction::class)->setName('Account Sign In');
 
-        $group->map(['POST', 'GET'],'/sign-up', SignUpAction::class)->setName('Account Sign Up');
+        $account->map(['POST', 'GET'],'/sign-up', SignUpAction::class)->setName('Account Sign Up');
 
-        $group->get('/sign-out', SignOutAction::class)->setName('Account Sign Out')->addMiddleware($ram);
+        $account->get('/sign-out', SignOutAction::class)->setName('Account Sign Out')->addMiddleware($ram);
     });
 
     /*$app->options('/{routes:.*}', function (Request $request, Response $response) {
