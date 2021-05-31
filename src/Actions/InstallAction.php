@@ -26,6 +26,39 @@ class InstallAction extends Action {
             "primary key (<user_id>)"
         ]);
 
+        $this->medoo->create("notes", [
+            "note_id" => ["int", "auto_increment", "not null"],
+            "name" => ["varchar(512)", "not null"],
+            "content" => ["text", "not null"],
+            "owner_id" => ["int", "not null"],
+            "primary key (<note_id>)",
+            "constraint notes_users_user_id_fk foreign key (<owner_id>) references users(<user_id>) on delete cascade"
+        ]);
+
+        $this->medoo->create("groups", [
+            "group_id" => ["int", "auto_increment", "not null"],
+            "name" => ["varchar(512)", "not null"],
+            "owner_id" => ["int", "not null"],
+            "primary key (<group_id>)",
+            "constraint groups_users_user_id_fk foreign key (<owner_id>) references users(<user_id>) on delete cascade"
+        ]);
+
+        $this->medoo->create("members", [
+            "user_id" => ["int", "not null"],
+            "group_id" => ["int", "not null"],
+            "primary key (<user_id>, <group_id>)",
+            "constraint members_users_user_id_fk foreign key (<user_id>) references users(<user_id>) on delete cascade",
+            "constraint members_groups_group_id_fk foreign key (<group_id>) references groups(<group_id>) on delete cascade",
+        ]);
+
+        $this->medoo->create("subscriptions", [
+            "subscription_id" => ["int", "auto_increment", "not null"],
+            "user_id" => ["int", "not null"],
+            "value" => ["text", "not null"],
+            "primary key (<subscription_id>)",
+            "constraint subscriptions_users_user_id_fk foreign key (<user_id>) references users(<user_id>) on delete cascade",
+        ]);
+
         return $this->render("install.twig", [
 
         ]);
