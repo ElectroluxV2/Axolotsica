@@ -19,7 +19,7 @@
     <main class="container m-4">
         <h1>{{ name }}</h1>
         <small>By {{ owner.given_name }} {{ owner.family_name }}</small>
-        <article class="pt-3 pb-5 mw-100">
+        <article class="pt-3 pb-5 mw-100 overflow-scroll">
             {% autoescape %}
             {{ content | raw }}
             {% endautoescape %}
