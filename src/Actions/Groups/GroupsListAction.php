@@ -21,16 +21,31 @@ class GroupsListAction extends Action {
         $groups = $this->medoo->select("groups", [
             "[>]users" => ["groups.owner_id" => "user_id"]
         ],[
-           "groups.group_id",
-           "groups.name",
-           "groups.owner_id",
-           "users.given_name",
-           "users.family_name",
+            "groups.group_id",
+            "groups.name",
+            "groups.owner_id",
+            "owner" => [
+                "users.given_name",
+                "users.family_name",
+            ]
         ]);
 
-        // TODO: Implement action() method.
+        foreach ($groups as &$group) {
+            $group["members_count"] = 1 + $this->medoo->count("members", [
+                "group_id" => $group["group_id"]
+            ]);
+
+            /*$group["notes_count"] = $this->medoo->count("notes",[
+                "[>]"
+            ], [
+                "onwer_id" => $group["group_id"]
+            ]);*/
+            $group["notes_count"] = 0;
+        }
+
         return $this->render("groups-list.twig", [
             "groups" => $groups,
+            "user_id" => $_SESSION["user"]["user_id"]
         ]);
     }
 }
