@@ -8,6 +8,21 @@
 
     <main class="container m-4">
         <h1>Your notes</h1>
+
+        <div class="row">
+            {% for note in notes %}
+                <div class="col-sm-4">
+                    <div class="card bg-info">
+                        <h5 class="card-header">{{ note.name }}</h5>
+                        <div class="card-body">
+                            <p class="card-text">{{ note.content | truncate(250) | raw }}</p>
+                            <a href="{{ full_url_for('Notes View', { 'note_id': note.note_id, 'note_name': note.name }) }}" class="btn btn-primary">Go</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
         <a href="{{ full_url_for('Notes Create') }}" class="btn btn-primary" role="button">Create new</a>
     </main>
 

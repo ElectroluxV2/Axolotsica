@@ -17,7 +17,16 @@ class NotesListAction extends Action {
      * @throws RuntimeError
      */
     protected function action(): Response {
-        // TODO: Implement action() method.
-        return $this->render("notes-list.twig", []);
+        $notes = $this->medoo->select("notes", [
+            "note_id",
+            "name",
+            "content",
+        ], [
+            "owner_id" => $_SESSION["user"]["user_id"]
+        ]);
+
+        return $this->render("notes-list.twig", [
+            "notes" => $notes
+        ]);
     }
 }
