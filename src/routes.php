@@ -11,7 +11,9 @@ use App\Actions\Groups\GroupsSettingsAction;
 use App\Actions\Groups\GroupsViewAction;
 use App\Actions\HomeAction;
 use App\Actions\InstallAction;
-use App\Actions\NotesAction;
+use App\Actions\Notes\NotesCreateAction;
+use App\Actions\Notes\NotesDeleteAction;
+use App\Actions\Notes\NotesListAction;
 use App\Actions\TestAction;
 use App\Middleware\RequireAccountMiddleware;
 use Psr\Log\LoggerInterface;
@@ -37,7 +39,14 @@ return function (App $app) {
 
     })->addMiddleware($ram);
 
-    $app->get('/notes', NotesAction::class)->setName('Notes')->addMiddleware($ram);
+    $app->group('/notes', function (Group $notes) {
+        $notes->get('', NotesListAction::class)->setName('Notes List');
+
+        $notes->map(['POST', 'GET'],'/create', NotesCreateAction::class)->setName('Notes Create');
+
+        $notes->post('/delete', NotesDeleteAction::class)->setName('Notes Delete');
+
+    })->addMiddleware($ram);
 
     $app->get('/test/[{name}]', TestAction::class)->setName('Test');
 

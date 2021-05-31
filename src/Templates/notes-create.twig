@@ -1,5 +1,52 @@
 {% extends "layout.twig" %}
 
+{% block head %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.7.1/tinymce.min.js" referrerpolicy="origin"></script>
+
+{% endblock head %}
+
+{% block title %}
+
+    Create new note
+
+{% endblock title %}
+
 {% block main %}
-    Notes create
+
+    <main class="container" style="min-height: 75vh;">
+
+        <h1>Create new note</h1>
+
+        <form action="{{ full_url_for('Notes Create') }}" method="post" novalidate>
+            <div class="row g-2">
+                <div class="col-12 form-floating">
+                    <input id="name" type="text" name="name" class="form-control bg-dark text-white"/>
+                    <label for="name">Name of note</label>
+                </div>
+
+                <div class="col-12 form-floating">
+                    <label for="tiny"></label><textarea id="tiny" name="content"></textarea>
+                </div>
+            </div>
+            <div class="container">
+                <input type="submit" class="btn btn-dark btn-lg btn-outline-primary m-3" value="Create"/>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        tinymce.init({
+            selector: "textarea#tiny",
+            skin: "oxide-dark",
+            content_css: "dark",
+            height: "600",
+            statusbar: false,
+            menubar: false,
+            toolbar: 'undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link | code',
+            plugins: 'link, code',
+            setup: editor => editor.on('change', e => editor.save())
+        });
+    </script>
+
 {% endblock main %}

@@ -1,5 +1,14 @@
 {% extends "layout.twig" %}
 
+{% block title %}
+    Your Notes
+{% endblock title %}
+
 {% block main %}
-    Notes list
+
+    <main class="container m-4">
+        <h1>Your notes</h1>
+        <a href="{{ full_url_for('Notes Create') }}" class="btn btn-primary" role="button">Create new</a>
+    </main>
+
 {% endblock main %}

@@ -1,12 +1,13 @@
 <?php declare(strict_types=1);
-namespace App\Actions;
+namespace App\Actions\Notes;
 
+use App\Actions\Action;
 use Psr\Http\Message\ResponseInterface as Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class NotesAction extends Action {
+class NotesDeleteAction extends Action {
 
     /**
      * @inheritDoc
@@ -17,6 +18,6 @@ class NotesAction extends Action {
      */
     protected function action(): Response {
         // TODO: Implement action() method.
-        return $this->render("notes-list.twig", []);
+        return $this->render("notes-delete.twig", []);
     }
 }
