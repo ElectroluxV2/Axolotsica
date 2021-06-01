@@ -30,12 +30,12 @@ class RequireAccountMiddleware implements Middleware {
         // Redirect to login page and save destination
         $routeContext = RouteContext::fromRequest($request);
         $routeParser = $routeContext->getRouteParser();
-        $url = $routeParser->urlFor($routeContext->getRoute()->getName());
+        $url = $routeParser->fullUrlFor($request->getUri(), $routeContext->getRoute()->getName(), $routeContext->getRoute()->getArguments());
         $_SESSION["forward_to"] = $url;
 
         $this->logger->info("Unauthenticated user tried to visit ${url}, forwarding to login page and saving destination");
 
         $response = $this->responseFactory->createResponse(302);
-        return $response->withHeader("Location", "account/sign-in");
+        return $response->withHeader("Location", $routeParser->fullUrlFor($request->getUri(), "Account Sign In"));
     }
 }
