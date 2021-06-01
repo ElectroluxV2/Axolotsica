@@ -16,6 +16,7 @@ use App\Actions\Notes\NotesCreateAction;
 use App\Actions\Notes\NotesDeleteAction;
 use App\Actions\Notes\NotesEditAction;
 use App\Actions\Notes\NotesListAction;
+use App\Actions\Notes\NotesShareAction;
 use App\Actions\Notes\NotesViewAction;
 use App\Actions\TestAction;
 use App\Middleware\RequireAccountMiddleware;
@@ -53,7 +54,7 @@ return function (App $app) {
 
         $notes->map(['POST', 'GET'],'/edit/{note_id}', NotesEditAction::class)->setName('Notes Edit');
 
-        $notes->get('/share/{note_id}', NotesEditAction::class)->setName('Notes Share');
+        $notes->get('/share/{note_id}', NotesShareAction::class)->setName('Notes Share');
 
         $notes->get('/view/{note_id}/{note_name}', NotesViewAction::class)->setName('Notes View');
 
