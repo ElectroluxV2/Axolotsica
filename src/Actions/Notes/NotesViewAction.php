@@ -37,7 +37,7 @@ class NotesViewAction extends Action {
             "notes.note_id" => $note_id
         ]);
 
-        if ($_SESSION["user"]["user_id"] !== $note["owner_id"]) {
+        if ($_SESSION["user"]["user_id"] !== $note["owner"]["user_id"]) {
             throw new Exception("Missing permission!");
         }
 
