@@ -2,6 +2,7 @@
 namespace App\Actions\Notes;
 
 use App\Actions\Action;
+use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -15,9 +16,24 @@ class NotesDeleteAction extends Action {
      * @throws SyntaxError
      * @throws LoaderError
      * @throws RuntimeError
+     * @throws Exception
      */
     protected function action(): Response {
-        // TODO: Implement action() method.
+        $note_id = $this->args["note_id"];
+
+        $note = $this->medoo->get("notes", [
+            "note_id",
+            "owner_id",
+            "name",
+            "content"
+        ], [
+            "note_id" => $note_id
+        ]);
+
+        if ($_SESSION["user"]["user_id"] !== $note["owner_id"]) {
+            throw new Exception("Missing permission!");
+        }
+
         return $this->render("notes-delete.twig", []);
     }
 }

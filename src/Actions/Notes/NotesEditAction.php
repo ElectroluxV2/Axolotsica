@@ -22,20 +22,20 @@ class NotesEditAction extends Action {
     protected function action(): Response {
         $note_id = $this->args["note_id"];
 
+        $note = $this->medoo->get("notes", [
+            "note_id",
+            "owner_id",
+            "name",
+            "content"
+        ], [
+            "note_id" => $note_id
+        ]);
+
+        if ($_SESSION["user"]["user_id"] !== $note["owner_id"]) {
+            throw new Exception("Missing permission!");
+        }
+
         if ($this->request->getMethod() === "GET") {
-            $note = $this->medoo->get("notes", [
-                "note_id",
-                "owner_id",
-                "name",
-                "content"
-            ], [
-                "note_id" => $note_id
-            ]);
-
-            if ($_SESSION["user"]["user_id"] !== $note["owner_id"]) {
-                throw new Exception("Missing permission!");
-            }
-
             return $this->render("notes-edit.twig", [
                 "note" => $note
             ]);

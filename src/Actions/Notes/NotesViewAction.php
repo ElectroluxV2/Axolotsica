@@ -2,6 +2,7 @@
 namespace App\Actions\Notes;
 
 use App\Actions\Action;
+use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -15,6 +16,7 @@ class NotesViewAction extends Action {
      * @throws SyntaxError
      * @throws LoaderError
      * @throws RuntimeError
+     * @throws Exception
      */
     protected function action(): Response {
         $note_id = $this->args["note_id"];
@@ -35,6 +37,9 @@ class NotesViewAction extends Action {
             "notes.note_id" => $note_id
         ]);
 
+        if ($_SESSION["user"]["user_id"] !== $note["owner_id"]) {
+            throw new Exception("Missing permission!");
+        }
 
         return $this->render("notes-view.twig", [
             "note" => $note,
