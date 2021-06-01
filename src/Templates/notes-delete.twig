@@ -1,5 +1,20 @@
 {% extends "layout.twig" %}
 
 {% block main %}
-    Notes delete
+    <div class="card text-center bg-danger">
+        <div class="card-header">
+            Are you sure?
+        </div>
+        <div class="card-body bg-dark">
+            <h5 class="card-title">Delete note #{{ note.note_id }}</h5>
+            <p class="card-text">{{ note.content | truncate(250) | raw }}...</p>
+            <form method="post">
+                <input type="submit" class="btn btn-danger" value="Yes">
+                <input type="submit" formmethod="get" class="btn btn-primary" value="No">
+            </form>
+        </div>
+        <div class="card-footer text-muted">
+            This operation can't be undone
+        </div>
+    </div>
 {% endblock main %}
