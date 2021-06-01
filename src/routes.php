@@ -65,7 +65,7 @@ return function (App $app) {
     $app->get('/install', InstallAction::class)->setName('Install');
 
     $app->group('/account', function (Group $account) use ($ram) {
-        $account->get('/settings', SettingsAction::class)->setName('Account Settings')->addMiddleware($ram);;
+        $account->map(['POST', 'GET'],'/settings', SettingsAction::class)->setName('Account Settings')->addMiddleware($ram);;
 
         $account->map(['POST', 'GET'],'/sign-in', SignInAction::class)->setName('Account Sign In');
 

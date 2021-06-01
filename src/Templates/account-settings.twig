@@ -1,5 +1,42 @@
 {% extends "layout.twig" %}
 
 {% block main %}
-Settings
+    <main>
+
+        <h1>Settings.</h1>
+
+        <form action="{{ full_url_for('Account Settings') }}" method="post" novalidate>
+            <div class="row g-1">
+                <div class="col-md form-floating">
+
+                    <input type="email" name="email" class="form-control bg-dark text-white {% if email_error is not empty %}is-invalid{% elseif show_valid %}is-valid{% endif %}" id="email" value="{{ email }}" required/>
+                    <label for="email">Email</label>
+                    <div class="invalid-feedback">{{ email_error }}</div>
+
+                </div>
+            </div>
+            <div class="row g-2 pt-2">
+                <div class="col-md form-floating">
+
+                    <input type="text" name="given_name" class="form-control bg-dark text-white {% if given_name_error is not empty %}is-invalid{% elseif show_valid %}is-valid{% endif %}" id="given_name" value="{{ given_name }}" required/>
+                    <label for="given_name">Given name</label>
+                    <div class="invalid-feedback">{{ given_name_error }}</div>
+
+                </div>
+                <div class="col-md form-floating">
+
+                    <input type="text" name="family_name" class="form-control bg-dark text-white {% if family_name_error is not empty %}is-invalid{% elseif show_valid %}is-valid{% endif %}" id="family_name" value="{{ family_name }}" required/>
+                    <label for="family_name">Family name</label>
+                    <div class="invalid-feedback">{{ family_name_error }}</div>
+
+                </div>
+            </div>
+            <div class="container">
+                <button class="btn btn-dark btn-lg btn-outline-info m-3">Enable notifications</button>
+                <input type="submit" class="btn btn-dark btn-lg btn-outline-primary m-3" value="Save"/>
+                <a href="{{ full_url_for('Account Settings') }}" class="btn btn-dark btn-lg btn-outline-secondary m-3">Cancel</a>
+            </div>
+        </form>
+
+    </main>
 {% endblock main %}
