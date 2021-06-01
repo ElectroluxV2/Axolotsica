@@ -13,7 +13,6 @@ class HomeAction extends Action {
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws LoaderError
-     * @throws ErrorException
      */
     protected function action(): Response {
 
