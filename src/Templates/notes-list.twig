@@ -4,26 +4,37 @@
     Your Notes
 {% endblock title %}
 
+{% block head %}
+    <style>
+        .card-text {
+            max-width: fit-content !important;
+            background-color: transparent !important;
+        }
+    </style>
+{% endblock head %}
+
 {% block main %}
 
     <main class="container m-4">
         <h1>Your notes</h1>
 
         <div class="row">
+            <div class="col-sm-4">
+                <a href="{{ full_url_for('Notes Create') }}" class="btn btn-primary" role="button">Create new</a>
+
+            </div>
             {% for note in notes %}
                 <div class="col-sm-4">
                     <div class="card bg-info">
-                        <h5 class="card-header">{{ note.name }}</h5>
+                        <h5 class="card-header"><a href="{{ full_url_for('Notes View', { 'note_id': note.note_id, 'note_name': note.name }) }}">{{ note.name }}</a></h5>
                         <div class="card-body">
                             <p class="card-text">{{ note.content | truncate(250) | raw }}</p>
-                            <a href="{{ full_url_for('Notes View', { 'note_id': note.note_id, 'note_name': note.name }) }}" class="btn btn-primary">Go</a>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
 
-        <a href="{{ full_url_for('Notes Create') }}" class="btn btn-primary" role="button">Create new</a>
     </main>
 
 {% endblock main %}

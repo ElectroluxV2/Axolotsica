@@ -1,7 +1,7 @@
 {% extends "layout.twig" %}
 
 {% block title %}
-    {{ name }}
+    {{ note.name }}
 {% endblock title %}
 
 {% block head %}
@@ -17,11 +17,26 @@
 {% block main %}
 
     <main class="container m-4">
-        <h1>{{ name }}</h1>
-        <small>By {{ owner.given_name }} {{ owner.family_name }}</small>
-        <article class="pt-3 pb-5 mw-100 overflow-scroll">
+        <h1>{{ note.name }}</h1>
+
+        {% if note.owner.user_id == user.user_id %}
+
+            <div class="btn-group" role="group">
+                <a href="{{ full_url_for('Notes Delete', { 'note_id': note.note_id }) }}" class="btn btn-danger">Delete</a>
+                <a href="{{ full_url_for('Notes Edit', { 'note_id': note.note_id }) }}" class="btn btn-warning">Edit</a>
+                <a href="{{ full_url_for('Notes Share', { 'note_id': note.note_id }) }}" class="btn btn-success">Share</a>
+            </div>
+
+        {% else %}
+
+            <small>By {{ note.owner.given_name }} {{ note.owner.family_name }}</small>
+
+        {% endif %}
+
+        <article class="pt-3 pb-5 mw-100">
+
             {% autoescape %}
-            {{ content | raw }}
+            {{ note.content | raw }}
             {% endautoescape %}
 
         </article>

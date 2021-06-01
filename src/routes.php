@@ -8,11 +8,13 @@ use App\Actions\Groups\GroupsCreateAction;
 use App\Actions\Groups\GroupsDeleteAction;
 use App\Actions\Groups\GroupsListAction;
 use App\Actions\Groups\GroupsSettingsAction;
+use App\Actions\Groups\GroupsShareAction;
 use App\Actions\Groups\GroupsViewAction;
 use App\Actions\HomeAction;
 use App\Actions\InstallAction;
 use App\Actions\Notes\NotesCreateAction;
 use App\Actions\Notes\NotesDeleteAction;
+use App\Actions\Notes\NotesEditAction;
 use App\Actions\Notes\NotesListAction;
 use App\Actions\Notes\NotesViewAction;
 use App\Actions\TestAction;
@@ -32,9 +34,11 @@ return function (App $app) {
 
         $groups->map(['POST', 'GET'],'/create', GroupsCreateAction::class)->setName('Groups Create');
 
-        $groups->post('/delete', GroupsDeleteAction::class)->setName('Groups Delete');
+        $groups->map(['POST', 'GET'],'/delete', GroupsDeleteAction::class)->setName('Groups Delete');
 
-        $groups->map(['POST', 'GET'], '/settings', GroupsSettingsAction::class)->setName('Groups Settings');
+        $groups->map(['POST', 'GET'],'/share', GroupsShareAction::class)->setName('Groups Share');
+
+        $groups->map(['POST', 'GET'],'/settings', GroupsSettingsAction::class)->setName('Groups Settings');
 
         $groups->get('/view/{group_id}/{group_name}', GroupsViewAction::class)->setName('Groups View');
 
@@ -45,7 +49,11 @@ return function (App $app) {
 
         $notes->map(['POST', 'GET'],'/create', NotesCreateAction::class)->setName('Notes Create');
 
-        $notes->post('/delete', NotesDeleteAction::class)->setName('Notes Delete');
+        $notes->map(['POST', 'GET'],'/delete/{note_id}', NotesDeleteAction::class)->setName('Notes Delete');
+
+        $notes->map(['POST', 'GET'],'/edit/{note_id}', NotesEditAction::class)->setName('Notes Edit');
+
+        $notes->get('/share/{note_id}', NotesEditAction::class)->setName('Notes Share');
 
         $notes->get('/view/{note_id}/{note_name}', NotesViewAction::class)->setName('Notes View');
 
