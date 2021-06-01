@@ -1,7 +1,10 @@
 <?php declare(strict_types=1);
 namespace App\Actions;
 
+use ErrorException;
 use Medoo\Medoo;
+use Minishlink\WebPush\Subscription;
+use Minishlink\WebPush\WebPush;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
@@ -15,14 +18,16 @@ abstract class Action {
     protected LoggerInterface $logger;
     protected Twig $twig;
     protected Medoo $medoo;
+    protected WebPush $webPush;
     protected Request $request;
     protected Response $response;
     protected array $args;
 
-    public function __construct(LoggerInterface $logger, Twig $twig, Medoo $medoo) {
+    public function __construct(LoggerInterface $logger, Twig $twig, Medoo $medoo, WebPush $webPush) {
         $this->logger = $logger;
         $this->twig = $twig;
         $this->medoo = $medoo;
+        $this->webPush = $webPush;
     }
 
     /**
@@ -89,5 +94,35 @@ abstract class Action {
         }
 
         return $text;
+    }
+
+    /**
+     * @throws ErrorException
+     */
+    protected function push(int | string $user_id, $payload): bool {
+        $subscriptions = $this->medoo->select("subscriptions", [
+            "[>]users" => ["users.user_id" => "user_id"]
+        ], [
+            "subscriptions.value",
+            "users.family_name",
+            "users.given_name",
+        ], [
+            "subscriptions.user_id" => $user_id
+        ]);
+
+        $report = null;
+        foreach ($subscriptions as $subscription) {
+
+            $report = $this->webPush->sendOneNotification(
+                Subscription::create(json_decode($subscription["value"], true)),
+                $payload
+            );
+
+            if (!$report?->isSuccess()) {
+                $this->logger->error("Failed to send push {$report->getReason()}");
+            }
+        }
+
+        return $report?->isSuccess() ?? true;
     }
 }

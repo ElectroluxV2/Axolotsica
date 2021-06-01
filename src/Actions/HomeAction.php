@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace App\Actions;
 
+use ErrorException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -14,7 +15,6 @@ class HomeAction extends Action {
      * @throws LoaderError
      */
     protected function action(): Response {
-        // TODO: Implement action() method.
 
         return $this->render("home.twig", $_SESSION["user"]);
     }
