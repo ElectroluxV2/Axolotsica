@@ -48,7 +48,7 @@ class NotesCreateAction extends Action {
             $errors = [];
         }
 
-        return $this->render("notes-create.twig", $data + $errors);
+        return $this->render("notes-create.twig", ["note" => $data] + $errors);
     }
 
     private function formatCheck(Array $data, Array& $errors): bool {
