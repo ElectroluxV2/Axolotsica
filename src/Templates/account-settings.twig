@@ -32,11 +32,108 @@
                 </div>
             </div>
             <div class="container">
-                <button class="btn btn-dark btn-lg btn-outline-info m-3">Enable notifications</button>
+                <button onclick="enablePush(event)" class="btn btn-dark btn-lg btn-outline-info m-3">Enable notifications</button>
                 <input type="submit" class="btn btn-dark btn-lg btn-outline-primary m-3" value="Save"/>
                 <a href="{{ full_url_for('Account Settings') }}" class="btn btn-dark btn-lg btn-outline-secondary m-3">Cancel</a>
             </div>
+
+
+            <div id="alert" class="alert alert-danger d-flex align-items-center fade alert-dismissible" role="alert">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                <div id="error">Error</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <div id="alert2" class="alert alert-success d-flex align-items-center fade alert-dismissible" role="alert2">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                <div id="message">enabled</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert2" aria-label="Close"></button>
+            </div>
         </form>
+
+        <script>
+
+            function urlB64ToUint8Array(base64String) {
+                const padding = '='.repeat((4 - base64String.length % 4) % 4);
+                const base64 = (base64String + padding)
+                    .replace(/\-/g, '+')
+                    .replace(/_/g, '/');
+
+                const rawData = window.atob(base64);
+                const outputArray = new Uint8Array(rawData.length);
+
+                for (let i = 0; i < rawData.length; ++i) {
+                    outputArray[i] = rawData.charCodeAt(i);
+                }
+                return outputArray;
+            }
+
+            const enablePush = e => {
+                e.preventDefault();
+
+                const alert = document.getElementById("alert");
+                const alert2 = document.getElementById("alert2");
+                const error = document.getElementById("error");
+                const message = document.getElementById("message");
+
+                if (!('serviceWorker' in navigator)) {
+                    error.innerText = "Service workers are not supported by this browser";
+                    alert.classList.add("show");
+                    return;
+                }
+
+                if (!('PushManager' in window)) {
+                    error.innerText = "Push notifications are not supported by this browser";
+                    alert.classList.add("show");
+                    return;
+                }
+
+                if (!('showNotification' in ServiceWorkerRegistration.prototype)) {
+                    error.innerText = "Notifications are not supported by this browser";
+                    alert.classList.add("show");
+                    return;
+                }
+
+                if (Notification.permission === 'denied') {
+                    error.innerText = "Notifications are denied by the user";
+                    alert.classList.add("show");
+                    return;
+                }
+
+
+
+                navigator.serviceWorker.register("{{ full_url_for('Home') }}serviceWorker.js").then(serviceWorkerRegistration => {
+                    console.log(serviceWorkerRegistration)
+                    serviceWorkerRegistration.pushManager.subscribe({
+                            userVisibleOnly: true,
+                            applicationServerKey: urlB64ToUint8Array("BOypIXp-o4_2SYjzChz_FExClfIPBfHVz1lbTiwP9-UoPCbf_mZAjdpLq2hxLzWnsPTYHKXqtdF7jdy-zT1hxPw")
+                        }).then(subscription => {
+                            console.log(subscription)
+                                const json = JSON.stringify(subscription.toJSON(), null, 2);
+
+                                fetch("{{ full_url_for('Subscribe') }}", {
+                                   method: 'post',
+                                   body: new URLSearchParams(`subscription=${json}`)
+                                }).then(rawResponse => {
+                                    console.log(rawResponse);
+                                    message.innerText = "Notifications are enabled now";
+                                    alert2.classList.add("show");
+                                }).catch(error => {
+                                    error.innerText = "Error: "+e.message;
+                                    alert.classList.add("show");
+                                });
+                            },
+                            error => {
+                                error.innerText = "Error: "+e.message;
+                                alert.classList.add("show");
+                            });
+                })
+                .catch(e => {
+                    error.innerText = `Service worker registration failed ${e.message}`;
+                    alert.classList.add("show");
+                });
+            };
+        </script>
 
     </main>
 {% endblock main %}

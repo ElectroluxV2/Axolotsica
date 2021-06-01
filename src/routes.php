@@ -4,6 +4,7 @@ use App\Actions\Account\SettingsAction;
 use App\Actions\Account\SignInAction;
 use App\Actions\Account\SignOutAction;
 use App\Actions\Account\SignUpAction;
+use App\Actions\Account\SubscribeAction;
 use App\Actions\Groups\GroupsCreateAction;
 use App\Actions\Groups\GroupsDeleteAction;
 use App\Actions\Groups\GroupsListAction;
@@ -72,6 +73,8 @@ return function (App $app) {
         $account->map(['POST', 'GET'],'/sign-up', SignUpAction::class)->setName('Account Sign Up');
 
         $account->get('/sign-out', SignOutAction::class)->setName('Account Sign Out')->addMiddleware($ram);
+
+        $account->post('/subscribe', SubscribeAction::class)->setName('Subscribe')->addMiddleware($ram);
     });
 
     /*$app->options('/{routes:.*}', function (Request $request, Response $response) {

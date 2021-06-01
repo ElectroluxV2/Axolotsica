@@ -34,7 +34,8 @@ return function (ContainerBuilder $containerBuilder) {
             $settings = $c->get(Settings::class);
             return new Medoo($settings->get(Medoo::class));
         }, WebPush::class => function (ContainerInterface $c) {
-            return new WebPush();
+            $settings = $c->get(Settings::class);
+            return new WebPush($settings->get(WebPush::class));
         }
     ]);
 };
