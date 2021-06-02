@@ -29,7 +29,7 @@
                     <div class="card bg-info">
                         <h5 class="card-header"><a href="{{ full_url_for('Notes View', { 'note_id': note.note_id, 'note_name': note.name }) }}">{{ note.name }}</a></h5>
                         <div class="card-body m-2">
-                            <div class="card-text">{{ note.content | truncate(250) | raw }}</div>
+                            <div class="card-text">{{ note.content | raw }}</div>
                         </div>
                     </div>
                 </div>
