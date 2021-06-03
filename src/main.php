@@ -36,12 +36,6 @@ $dependencies($containerBuilder);
 // Build PHP-DI Container instance
 $container = $containerBuilder->build();
 
-// Add custom Twig extension
-$container->get(Twig::class)->getEnvironment()->addFilter(new TwigFilter('truncate', function ($html, $maxLength) {
-    return $html;
-    ///return tidy_repair_string(substr($html, 0, $maxLength), ['wrap' => 0, 'show-body-only' => TRUE], 'utf8');
-}));
-
 // Instantiate the app
 AppFactory::setContainer($container);
 $app = AppFactory::create();
