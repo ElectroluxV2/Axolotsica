@@ -7,7 +7,7 @@
         </div>
         <div class="card-body bg-dark">
             <h5 class="card-title">Delete note #{{ note.note_id }}</h5>
-            <p class="card-text">{{ note.content | truncate(250) | raw }}...</p>
+            <p class="card-text">{{ note.content | raw }}...</p>
             <form method="post">
                 <input type="submit" class="btn btn-danger" value="Yes">
                 <input type="submit" formmethod="get" class="btn btn-primary" value="No">
