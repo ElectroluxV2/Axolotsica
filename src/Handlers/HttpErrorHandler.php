@@ -32,6 +32,7 @@ class HttpErrorHandler extends SlimErrorHandler {
      * @inheritdoc
      */
     protected function respond(): Response {
+        $this->displayErrorDetails = true;
         $exception = $this->exception;
         $statusCode = 500;
         $error = new ActionError(ActionError::SERVER_ERROR,'An internal error has occurred while processing your request.');
@@ -55,8 +56,10 @@ class HttpErrorHandler extends SlimErrorHandler {
             }
         }
 
+        $a = null;
         if (!($exception instanceof HttpException) && $exception instanceof Throwable && $this->displayErrorDetails) {
             $error->setDescription($exception->getMessage());
+            $a = $exception->getTraceAsString();
         }
 
         $response = $this->responseFactory->createResponse($statusCode);
@@ -64,7 +67,7 @@ class HttpErrorHandler extends SlimErrorHandler {
         try {
             return $this->twig->render($response, "error.twig", [
                 "code" => $statusCode,
-                "message" => $error->getDescription()
+                "message" => $error->getDescription().' type: '.$error->getType().$a
             ]);
         } catch (LoaderError | RuntimeError | SyntaxError $e) {
             die("An error occurred: {$e->getMessage()}.");

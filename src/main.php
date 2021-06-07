@@ -38,77 +38,8 @@ $container = $containerBuilder->build();
 
 // Add custom Twig extension
 $container->get(Twig::class)->getEnvironment()->addFilter(new TwigFilter('truncate', function ($html, $maxLength) {
-    $printedLength = 0;
-    $position = 0;
-    $tags = array();
-
-    // For UTF-8, we need to count multibyte sequences as one character.
-    $re = '{</?([a-z]+)[^>]*>|&#?[a-zA-Z0-9]+;|[\x80-\xFF][\x80-\xBF]*}';
-
-
-    while ($printedLength < $maxLength && preg_match($re, $html, $match, PREG_OFFSET_CAPTURE, $position))
-    {
-        list($tag, $tagPosition) = $match[0];
-
-        // Print text leading up to the tag.
-        $str = substr($html, $position, $tagPosition - $position);
-        if ($printedLength + strlen($str) > $maxLength)
-        {
-            print(substr($str, 0, $maxLength - $printedLength));
-            $printedLength = $maxLength;
-            break;
-        }
-
-        print($str);
-        $printedLength += strlen($str);
-        if ($printedLength >= $maxLength) break;
-
-        if ($tag[0] == '&' || ord($tag) >= 0x80)
-        {
-            // Pass the entity or UTF-8 multibyte sequence through unchanged.
-            print($tag);
-            $printedLength++;
-        }
-        else
-        {
-            // Handle the tag.
-            $tagName = $match[1][0];
-            if ($tag[1] == '/')
-            {
-                // This is a closing tag.
-
-                $openingTag = array_pop($tags);
-                assert($openingTag == $tagName); // check that tags are properly nested.
-
-                print($tag);
-            }
-            else if ($tag[strlen($tag) - 2] == '/')
-            {
-                // Self-closing tag.
-                print($tag);
-            }
-            else
-            {
-                // Opening tag.
-                print($tag);
-                $tags[] = $tagName;
-            }
-        }
-
-        // Continue after the tag.
-        $position = $tagPosition + strlen($tag);
-    }
-
-    // Print any remaining text.
-    $ret = "";
-    if ($printedLength < $maxLength && $position < strlen($html))
-        $ret .= (substr($html, $position, $maxLength - $printedLength));
-
-    // Close any open tags.
-    while (!empty($tags))
-        $ret .= sprintf('</%s>', array_pop($tags));
-
-    return $ret;
+    return $html;
+    ///return tidy_repair_string(substr($html, 0, $maxLength), ['wrap' => 0, 'show-body-only' => TRUE], 'utf8');
 }));
 
 // Instantiate the app
