@@ -2,6 +2,18 @@
 
 {% block main %}
     <main class="container">
-        <h1>Notes for group: {{ name }}</h1>
+        <h1>{{ group.name }}</h1>
+
+        {% if group.owner_id == user.user_id %}
+
+        <div class="btn-group" role="group">
+            <a href="{{ full_url_for('Groups Delete', { 'group_id': group.group_id, 'group_name': sname }) }}" class="btn btn-danger">Delete</a>
+            <a href="{{ full_url_for('Groups Settings', { 'group_id': group.group_id, 'group_name': sname }) }}" class="btn btn-warning">Settings</a>
+            <a href="{{ full_url_for('Groups Share', { 'group_id': group.group_id, 'group_name': sname }) }}" class="btn btn-success">Share</a>
+        </div>
+
+        {% endif %}
+
+        <h1>Notes:</h1>
     </main>
 {% endblock main %}

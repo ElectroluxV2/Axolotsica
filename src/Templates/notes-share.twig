@@ -1,5 +1,25 @@
 {% extends "layout.twig" %}
 
 {% block main %}
-    Notes share
+
+    <main class="container m-4">
+        <h1>Choose group to share</h1>
+
+        <div class="list-group">
+
+            <div class="row">
+                {% for group in groups %}
+                <div class="col-4">
+                    <label class="list-group-item bg-info">
+                        <input class="form-check-input" type="checkbox">
+                        {{ group.name }}
+                    </label>
+                </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+    </main>
+
 {% endblock main %}

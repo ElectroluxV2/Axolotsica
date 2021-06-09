@@ -43,7 +43,8 @@ class NotesViewAction extends Action {
 
         return $this->render("notes-view.twig", [
             "note" => $note,
-            "user" => $_SESSION["user"]
+            "user" => $_SESSION["user"],
+            "sname" => $this->slugs($note["name"])
         ]);
     }
 }

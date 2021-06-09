@@ -17,7 +17,24 @@ class NotesShareAction extends Action {
      * @throws RuntimeError
      */
     protected function action(): Response {
-        // TODO: Implement action() method.
-        return $this->render("notes-share.twig", []);
+        $ownedGroups = $this->medoo->select("groups", [
+            "group_id",
+            "name"
+        ], [
+            "owner_id" => $_SESSION["user"]["user_id"]
+        ]);
+
+        $memberGroups = $this->medoo->select("groups", [
+            "[>]members" => ["groups.group_id" => "group_id"]
+        ], [
+            "groups.group_id",
+            "groups.name"
+        ], [
+            "members.user_id" => $_SESSION["user"]["user_id"]
+        ]);
+
+        return $this->render("notes-share.twig", [
+            "groups" => $ownedGroups + $memberGroups
+        ]);
     }
 }

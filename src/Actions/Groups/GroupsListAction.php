@@ -18,9 +18,9 @@ class GroupsListAction extends Action {
      */
     protected function action(): Response {
 
-        $groups = $this->medoo->select("groups", [
+        $ownedGroups = $this->medoo->select("groups", [
             "[>]users" => ["groups.owner_id" => "user_id"]
-        ],[
+        ], [
             "groups.group_id",
             "groups.name",
             "groups.owner_id",
@@ -28,7 +28,26 @@ class GroupsListAction extends Action {
                 "users.given_name",
                 "users.family_name",
             ]
+        ], [
+            "owner_id" => $_SESSION["user"]["user_id"]
         ]);
+
+        $memberGroups = $this->medoo->select("groups", [
+            "[>]members" => ["groups.group_id" => "group_id"],
+            "[>]users" => ["groups.owner_id" => "user_id"]
+        ], [
+            "groups.group_id",
+            "groups.name",
+            "groups.owner_id",
+            "owner" => [
+                "users.given_name",
+                "users.family_name",
+            ]
+        ], [
+            "members.user_id" => $_SESSION["user"]["user_id"]
+        ]);
+
+        $groups = $ownedGroups + $memberGroups;
 
         foreach ($groups as &$group) {
             $group["members_count"] = 1 + $this->medoo->count("members", [

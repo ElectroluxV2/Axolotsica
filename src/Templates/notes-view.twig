@@ -22,9 +22,9 @@
         {% if note.owner.user_id == user.user_id %}
 
             <div class="btn-group" role="group">
-                <a href="{{ full_url_for('Notes Delete', { 'note_id': note.note_id }) }}" class="btn btn-danger">Delete</a>
-                <a href="{{ full_url_for('Notes Edit', { 'note_id': note.note_id }) }}" class="btn btn-warning">Edit</a>
-                <a href="{{ full_url_for('Notes Share', { 'note_id': note.note_id }) }}" class="btn btn-success">Share</a>
+                <a href="{{ full_url_for('Notes Delete', { 'note_id': note.note_id, 'note_name': sname }) }}" class="btn btn-danger">Delete</a>
+                <a href="{{ full_url_for('Notes Edit', { 'note_id': note.note_id, 'note_name': sname }) }}" class="btn btn-warning">Edit</a>
+                <a href="{{ full_url_for('Notes Share', { 'note_id': note.note_id, 'note_name': sname }) }}" class="btn btn-success">Share</a>
             </div>
 
         {% else %}

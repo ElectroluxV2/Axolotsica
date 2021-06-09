@@ -16,12 +16,12 @@
         <div class="card-body bg-dark">
             <h5 class="card-title">Delete note #{{ note.note_id }}</h5>
             <p class="card-text">{{ note.content | raw }}...</p>
-            <form method="post">
+            <form method="post" action="{{ current_url() }}">
                 <input type="submit" class="btn btn-danger" value="Yes">
-                <input type="submit" formmethod="get" class="btn btn-primary" value="No">
+                <input type="submit" formmethod="get" formaction="{{ full_url_for('Notes View', { 'note_id': note.note_id, 'note_name': note.name }) }}" class="btn btn-primary" value="No">
             </form>
         </div>
-        <div class="card-footer text-muted">
+        <div class="card-footer">
             This operation can't be undone
         </div>
     </div>
