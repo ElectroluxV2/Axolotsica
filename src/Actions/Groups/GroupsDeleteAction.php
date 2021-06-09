@@ -30,6 +30,8 @@ class GroupsDeleteAction extends Action {
             "group_id" => $group_id
         ]);
 
+        $group["sname"] = $this->slugs($group["name"]);
+
         if ($_SESSION["user"]["user_id"] !== $group["owner_id"]) {
             throw new Exception("Missing permission!");
         }

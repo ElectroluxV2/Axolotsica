@@ -60,6 +60,7 @@ class GroupsListAction extends Action {
                 "onwer_id" => $group["group_id"]
             ]);*/
             $group["notes_count"] = 0;
+            $group["sname"] = $this->slugs($group["name"]);
         }
 
         return $this->render("groups-list.twig", [

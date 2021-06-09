@@ -18,7 +18,7 @@
             <p class="card-text">{{ group.name }}</p>
             <form method="post" action="{{ current_url() }}">
                 <input type="submit" class="btn btn-danger" value="Yes">
-                <input type="submit" formmethod="get" formaction="{{ full_url_for('Groups View', { 'group_id': group.group_id, 'group_name': group.name }) }}" class="btn btn-primary" value="No">
+                <input type="submit" formmethod="get" formaction="{{ full_url_for('Groups View', { 'group_id': group.group_id, 'group_name': group.sname }) }}" class="btn btn-primary" value="No">
             </form>
         </div>
         <div class="card-footer">

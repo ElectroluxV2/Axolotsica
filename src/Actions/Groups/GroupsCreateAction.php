@@ -37,7 +37,7 @@ class GroupsCreateAction extends Action {
             // Forward to Group View
             return $this->response->withHeader("Location", RouteContext::fromRequest($this->request)->getRouteParser()->urlFor("Groups View", [
                 "group_id" => $group_id,
-                "group_name" => $data["name"]
+                "group_name" => $this->slugs($data["name"])
             ]))->withStatus(302);
         }
 

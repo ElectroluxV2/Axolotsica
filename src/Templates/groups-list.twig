@@ -16,7 +16,7 @@
             {% for group in groups %}
             <div class="col-sm-4">
                 <div class="card bg-info">
-                    <h5 class="card-header"><a href="{{ full_url_for('Groups View', { 'group_id': group.group_id, 'group_name': group.name }) }}">{{ group.name }}</a></h5>
+                    <h5 class="card-header"><a href="{{ full_url_for('Groups View', { 'group_id': group.group_id, 'group_name': group.sname }) }}">{{ group.name }}</a></h5>
                     <div class="card-body">
                         <p class="card-text">Created by: {{ group.owner.given_name }} {{ group.owner.family_name }}</p>
                         <p class="card-text">Notes count: {{ group.notes_count }}</p>

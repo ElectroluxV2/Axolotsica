@@ -30,6 +30,8 @@ class GroupsViewAction extends Action {
             "group_id" => $group_id
         ]);
 
+        $group["sname"] = $this->slugs($group["name"]);
+
         if ($group["owner_id"] !== $_SESSION["user"]["user_id"]) {
             if (!$this->medoo->has("members", [
                 "user_id" => $_SESSION["user"]["user_id"],
@@ -39,10 +41,20 @@ class GroupsViewAction extends Action {
             }
         }
 
+        $notes = $this->medoo->select("notes", [
+            "[>]notes_sharing" => ["notes.note_id" => "note_id"]
+        ], [
+            "notes.note_id",
+            "notes.name",
+            "notes.content"
+        ], [
+            "group_id" => $group["group_id"]
+        ]);
+
         return $this->render("groups-view.twig", [
             "group" => $group,
-            "user" => $_SESSION["user"],
-            "sname" => $this->slugs($group["name"])
+            "notes" => $notes,
+            "user" => $_SESSION["user"]
         ]);
     }
 }
