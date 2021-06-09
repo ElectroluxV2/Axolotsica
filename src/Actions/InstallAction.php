@@ -67,6 +67,13 @@ class InstallAction extends Action {
             "constraint notes_sharing_notes_note_id foreign key (<note_id>) references notes(<note_id>) on delete cascade",
         ]);
 
+        $this->medoo->create("join_group_hashes", [
+            "hash" => ["varchar(128)", "not null", "unique"],
+            "group_id" => ["int", "not null"],
+            "primary key (<hash>)",
+            "constraint join_group_hashes_groups_group_id_fk foreign key (<group_id>) references groups(<group_id>) on delete cascade",
+        ]);
+
         return $this->render("install.twig", [
 
         ]);

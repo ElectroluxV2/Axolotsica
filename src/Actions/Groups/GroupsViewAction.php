@@ -20,7 +20,6 @@ class GroupsViewAction extends Action {
      */
     protected function action(): Response {
         $group_id = $this->args["group_id"];
-        $group_name = $this->args["group_name"];
 
         $group = $this->medoo->get("groups", [
             "group_id",

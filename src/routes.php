@@ -7,6 +7,7 @@ use App\Actions\Account\SignUpAction;
 use App\Actions\Account\SubscribeAction;
 use App\Actions\Groups\GroupsCreateAction;
 use App\Actions\Groups\GroupsDeleteAction;
+use App\Actions\Groups\GroupsJoinAction;
 use App\Actions\Groups\GroupsListAction;
 use App\Actions\Groups\GroupsSettingsAction;
 use App\Actions\Groups\GroupsShareAction;
@@ -43,6 +44,8 @@ return function (App $app) {
         $groups->map(['POST', 'GET'],'/settings/{group_id}/{group_name}', GroupsSettingsAction::class)->setName('Groups Settings');
 
         $groups->get('/view/{group_id}/{group_name}', GroupsViewAction::class)->setName('Groups View');
+
+        $groups->get('/join/{group_id}/{hash}', GroupsJoinAction::class)->setName('Groups Join');
 
     })->addMiddleware($ram);
 

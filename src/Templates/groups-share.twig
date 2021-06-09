@@ -1,5 +1,18 @@
 {% extends "layout.twig" %}
 
+{% block title %}
+    Share group
+{% endblock %}
+
 {% block main %}
-    Groups Share
+    <main class="container m-4">
+        <h1>Your share link</h1>
+
+        <input  class="form-control bg-dark text-white" value="{{ full_url_for('Groups Join', {
+            "group_id": group.group_id,
+            "hash": hash
+        }) }}">
+
+        <small>One time usage</small>
+    </main>
 {% endblock main %}
