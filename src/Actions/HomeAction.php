@@ -16,6 +16,37 @@ class HomeAction extends Action {
      */
     protected function action(): Response {
 
-        return $this->render("home.twig", $_SESSION["user"]);
+        $ownNotes = $this->medoo->select("notes", [
+            "note_id",
+            "name",
+            "content"
+        ], [
+            "owner_id" => $_SESSION["user"]["user_id"]
+        ]);
+
+        $joinedGroups = $this->medoo->select("members", [
+            "group_id"
+        ], [
+            "user_id" => $_SESSION["user"]["user_id"]
+        ]);
+
+        $sharedNotes = [];
+        foreach ($joinedGroups as $joinedGroup) {
+            array_push($sharedNotes,$this->medoo->select("notes", [
+                "[>]notes_sharing" => ["notes.note_id" => "note_id"]
+            ], [
+                "notes.note_id",
+                "notes.name",
+                "notes.content"
+            ], [
+                "group_id" => $joinedGroup["group_id"]
+            ]));
+        }
+
+        return $this->render("home.twig", [
+            "user" => $_SESSION["user"],
+            "own_notes" => $ownNotes,
+            "shared_notes" => $sharedNotes
+        ]);
     }
 }
