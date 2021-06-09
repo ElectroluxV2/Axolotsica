@@ -59,6 +59,14 @@ class InstallAction extends Action {
             "constraint subscriptions_users_user_id_fk foreign key (<user_id>) references users(<user_id>) on delete cascade",
         ]);
 
+        $this->medoo->create("notes_sharing", [
+            "group_id" => ["int", "not null"],
+            "note_id" => ["int", "not null"],
+            "primary key (<group_id>, <note_id>)",
+            "constraint notes_sharing_groups_group_id_fk foreign key (<group_id>) references groups(<group_id>) on delete cascade",
+            "constraint notes_sharing_notes_note_id foreign key (<note_id>) references notes(<note_id>) on delete cascade",
+        ]);
+
         return $this->render("install.twig", [
 
         ]);

@@ -55,7 +55,7 @@ return function (App $app) {
 
         $notes->map(['POST', 'GET'],'/edit/{note_id}/{note_name}', NotesEditAction::class)->setName('Notes Edit');
 
-        $notes->get('/share/{note_id}/{note_name}', NotesShareAction::class)->setName('Notes Share');
+        $notes->map(['POST', 'GET'],'/share/{note_id}/{note_name}', NotesShareAction::class)->setName('Notes Share');
 
         $notes->get('/view/{note_id}/{note_name}', NotesViewAction::class)->setName('Notes View');
 
