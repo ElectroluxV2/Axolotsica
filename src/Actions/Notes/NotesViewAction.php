@@ -38,7 +38,27 @@ class NotesViewAction extends Action {
         ]);
 
         if ($_SESSION["user"]["user_id"] !== $note["owner"]["user_id"]) {
-            throw new Exception("Missing permission!");
+            // Check if its shared note
+            $sharedToGroups = $this->medoo->select("notes_sharing", [
+                "group_id"
+            ], [
+                "note_id" => $note_id
+            ]);
+
+            $good = false;
+            foreach ($sharedToGroups as $group) {
+                // If user is member
+                if ($this->medoo->has("members", [
+                    "group_id" => $group["group_id"],
+                    "user_id" => $_SESSION["user"]["user_id"]
+                ])) {
+                    $good = true;
+                    break;
+                }
+            }
+            if (!$good) {
+                throw new Exception("Missing permission!");
+            }
         }
 
         return $this->render("notes-view.twig", [
