@@ -58,6 +58,15 @@ class NotesShareAction extends Action {
         ]);
 
         foreach ($selectedGroupsIds as $group_id) {
+
+            // Check if user is already member of this group
+            if ($this->medoo->has("notes_sharing", [
+                "note_id" => $note_id,
+                "group_id" => $group_id
+            ])) {
+                throw new Exception("You are already shared this note to group #$group_id!");
+            }
+
             $this->medoo->insert("notes_sharing", [
                 "note_id" => $note_id,
                 "group_id" => $group_id
