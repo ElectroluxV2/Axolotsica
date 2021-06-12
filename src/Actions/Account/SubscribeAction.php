@@ -20,6 +20,7 @@ class SubscribeAction extends Action {
         }
 
         $this->medoo->insert("subscriptions", [
+            "value_hash" => sha1($data["subscription"]),
             "user_id" => $_SESSION["user"]["user_id"],
             "value" => $data["subscription"]
         ]);

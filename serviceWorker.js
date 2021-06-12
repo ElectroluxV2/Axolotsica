@@ -7,9 +7,14 @@ self.addEventListener('push', function (event) {
         // you could refresh a notification badge here with postMessage API
         const title = "Axolotsica";
 
+        console.log(data);
+        data = JSON.parse(data);
+        console.log(data);
+
         return self.registration.showNotification(title, {
             body: data.message,
-            data: data.url
+            data: {url: data.url},
+            actions: [{action: "open_url", title: "Read Now"}]
         });
     };
 
@@ -22,7 +27,9 @@ self.addEventListener('push', function (event) {
 self.addEventListener('notificationclick',  event => {
     event.notification.close();
 
-    const url = event.notification.data;
+    console.log(event);
+
+    const url = event.notification.data.url;
 
     // This looks to see if the current is already open and
     // focuses if it is

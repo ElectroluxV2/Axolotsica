@@ -1,5 +1,22 @@
 {% extends "layout.twig" %}
 
+{% block title %}
+
+    {{ group.name }}
+
+{% endblock %}
+
+{% block head %}
+    <style>
+        .card-body {
+            max-width: fit-content !important;
+            background-color: transparent !important;
+            height: 12em;
+            overflow: hidden;
+        }
+    </style>
+{% endblock head %}
+
 {% block main %}
     <main class="container">
         <h1>{{ group.name }}</h1>
@@ -14,7 +31,7 @@
 
         {% endif %}
 
-        <h1>Notes:</h1>
+        <h1 class="mt-2">Notes shared within this group:</h1>
         <section class="container">
             <div class="row">
                 {% for note in notes %}

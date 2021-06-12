@@ -52,10 +52,10 @@ class InstallAction extends Action {
         ]);
 
         $this->medoo->create("subscriptions", [
-            "subscription_id" => ["int", "auto_increment", "not null"],
+            "value_hash" => ["varchar(40)", "not null", "unique"],
             "user_id" => ["int", "not null"],
             "value" => ["text", "not null"],
-            "primary key (<subscription_id>)",
+            "primary key (<value_hash>, <user_id>)",
             "constraint subscriptions_users_user_id_fk foreign key (<user_id>) references users(<user_id>) on delete cascade",
         ]);
 
@@ -70,7 +70,7 @@ class InstallAction extends Action {
         $this->medoo->create("join_group_hashes", [
             "hash" => ["varchar(128)", "not null", "unique"],
             "group_id" => ["int", "not null"],
-            "primary key (<hash>)",
+            "primary key (<hash>, <group_id>)",
             "constraint join_group_hashes_groups_group_id_fk foreign key (<group_id>) references groups(<group_id>) on delete cascade",
         ]);
 
