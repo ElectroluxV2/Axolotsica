@@ -52,17 +52,37 @@ class NotesShareAction extends Action {
             throw new Exception("You have to select at least one group");
         }
 
+        $noteUrl = RouteContext::fromRequest($this->request)->getRouteParser()->fullUrlFor($this->request->getUri() ,"Notes View", [
+            "note_id" => $note_id,
+            "note_name" => $note_name
+        ]);
+
         foreach ($selectedGroupsIds as $group_id) {
             $this->medoo->insert("notes_sharing", [
                 "note_id" => $note_id,
                 "group_id" => $group_id
             ]);
+
+            // Send push message to all members
+            $members = $this->medoo->select("members", [
+                "[>]users" => ["members.user_id" => "user_id"],
+            ], [
+                "users.user_id",
+                "given_name",
+                "family_name",
+            ], [
+                "group_id" => $group_id
+            ]);
+
+            foreach ($members as $user) {
+                $this->logger->info("member", $user);
+                $this->push($user["user_id"],
+                    "Hey ".$user["family_name"]."! ".$_SESSION["user"]["given_name"]." ".$_SESSION["user"]["family_name"]." created new note!",
+                    $noteUrl
+                );
+            }
         }
 
-        return $this->response->withHeader("Location", RouteContext::fromRequest($this->request)->getRouteParser()->fullUrlFor($this->request->getUri() ,"Notes View", [
-            "note_id" => $note_id,
-            "note_name" => $note_name
-        ]))->withStatus(302);
-
+        return $this->response->withHeader("Location", $noteUrl)->withStatus(302);
     }
 }

@@ -99,27 +99,34 @@ abstract class Action {
     /**
      * @throws ErrorException
      */
-    protected function push(int | string $user_id, $payload): bool {
+    protected function push(int | string $user_id, string $message, string $url): bool {
         $subscriptions = $this->medoo->select("subscriptions", [
-            "[>]users" => ["users.user_id" => "user_id"]
+            "value"
         ], [
-            "subscriptions.value",
-            "users.family_name",
-            "users.given_name",
-        ], [
-            "subscriptions.user_id" => $user_id
+            "user_id" => $user_id
         ]);
+
+        $this->logger->info("Subscriptions for $user_id", $subscriptions);
 
         $report = null;
         foreach ($subscriptions as $subscription) {
 
             $report = $this->webPush->sendOneNotification(
                 Subscription::create(json_decode($subscription["value"], true)),
-                $payload
+                json_encode([
+                    "message" => $message,
+                    "url" => $url
+                ])
             );
 
             if (!$report?->isSuccess()) {
-                $this->logger->error("Failed to send push {$report->getReason()}");
+                $this->logger->error("Failed to send push {$report->getReason()}, deleting this entry");
+
+                $this->medoo->delete("subscriptions", [
+                    "value" => $subscription["value"]
+                ]);
+            } else {
+                $this->logger->alert("Send push to $user_id");
             }
         }
 
