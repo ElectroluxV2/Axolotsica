@@ -37,6 +37,10 @@ class NotesViewAction extends Action {
             "notes.note_id" => $note_id
         ]);
 
+        if (!$note) {
+            throw new Exception("Note not found!");
+        }
+
         if ($_SESSION["user"]["user_id"] !== $note["owner"]["user_id"]) {
             // Check if its shared note
             $sharedToGroups = $this->medoo->select("notes_sharing", [

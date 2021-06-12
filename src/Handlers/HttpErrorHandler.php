@@ -56,10 +56,10 @@ class HttpErrorHandler extends SlimErrorHandler {
             }
         }
 
-        $a = null;
+        //$a = null;
         if (!($exception instanceof HttpException) && $exception instanceof Throwable && $this->displayErrorDetails) {
             $error->setDescription($exception->getMessage());
-            $a = $exception->getTraceAsString();
+            //$a = $exception->getTraceAsString();
         }
 
         $response = $this->responseFactory->createResponse($statusCode);
@@ -67,7 +67,7 @@ class HttpErrorHandler extends SlimErrorHandler {
         try {
             return $this->twig->render($response, "error.twig", [
                 "code" => $statusCode,
-                "message" => $error->getDescription().' type: '.$error->getType().$a
+                "message" => $error->getDescription()//.' type: '.$error->getType().$a
             ]);
         } catch (LoaderError | RuntimeError | SyntaxError $e) {
             die("An error occurred: {$e->getMessage()}.");
