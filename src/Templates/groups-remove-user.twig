@@ -1,0 +1,29 @@
+{% extends "layout.twig" %}
+
+{% block head %}
+    <style>
+        .card-text {
+            max-height: 60vh;
+        }
+    </style>
+{% endblock head %}
+
+{% block main %}
+    <div class="card text-center bg-danger">
+        <div class="card-header">
+            Are you sure?
+        </div>
+        <div class="card-body bg-dark">
+            <h5 class="card-title">Remove user from group #{{ group.group_id }} {{ group.name }}</h5>
+            <p class="card-text">Family name: {{ removeUser.family_name }}</p>
+            <p class="card-text">Given name: {{ removeUser.given_name }}</p>
+            <form method="post" action="{{ current_url() }}">
+                <input type="submit" class="btn btn-danger" value="Yes">
+                <input type="submit" formmethod="get" formaction="{{ full_url_for('Groups Settings', { 'group_id': group.group_id, 'group_name': group.sname }) }}" class="btn btn-primary" value="No">
+            </form>
+        </div>
+        <div class="card-footer">
+            This operation can't be undone
+        </div>
+    </div>
+{% endblock main %}

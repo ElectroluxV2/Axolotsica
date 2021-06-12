@@ -9,7 +9,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class GroupsDeleteAction extends Action {
+class GroupsRemoveUserAction extends Action {
 
     /**
      * @inheritDoc
@@ -21,6 +21,7 @@ class GroupsDeleteAction extends Action {
      */
     protected function action(): Response {
         $group_id = $this->args["group_id"];
+        $user_id = $this->args["user_id"];
 
         $group = $this->medoo->get("groups", [
             "group_id",
@@ -40,18 +41,31 @@ class GroupsDeleteAction extends Action {
             throw new Exception("Missing permission!");
         }
 
+        $user = $this->medoo->get("users", [
+            "user_id",
+            "family_name",
+            "given_name"
+        ], [
+            "user_id" => $user_id
+        ]);
+
         if ($this->request->getMethod() === 'GET') {
-            return $this->render("groups-delete.twig", [
-                "group" => $group
+            return $this->render("groups-remove-user.twig", [
+                "group" => $group,
+                "removeUser" => $user
             ]);
         }
 
         // Delete
-        $this->medoo->delete("groups", [
-            "group_id" => $group_id
+        $this->medoo->delete("members", [
+            "group_id" => $group_id,
+            "user_id" => $user_id
         ]);
 
-        // Forward to groups list
-        return $this->response->withHeader("Location", RouteContext::fromRequest($this->request)->getRouteParser()->fullUrlFor($this->request->getUri() ,"Groups List"))->withStatus(302);
+        // Forward to group settings
+        return $this->response->withHeader("Location", RouteContext::fromRequest($this->request)->getRouteParser()->fullUrlFor($this->request->getUri() ,"Groups Settings", [
+            "group_id" => $group_id,
+            "group_name" => $group["sname"]
+        ]))->withStatus(302);
     }
 }
