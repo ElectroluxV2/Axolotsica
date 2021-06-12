@@ -9,7 +9,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class GroupsRemoveUserAction extends Action {
+class GroupsRemoveNoteAction extends Action {
 
     /**
      * @inheritDoc
@@ -21,7 +21,7 @@ class GroupsRemoveUserAction extends Action {
      */
     protected function action(): Response {
         $group_id = $this->args["group_id"];
-        $user_id = $this->args["user_id"];
+        $note_id = $this->args["note_id"];
 
         $group = $this->medoo->get("groups", [
             "group_id",
@@ -41,33 +41,32 @@ class GroupsRemoveUserAction extends Action {
             throw new Exception("Missing permission!");
         }
 
-        $user = $this->medoo->get("users", [
-            "user_id",
-            "family_name",
-            "given_name"
+        $note = $this->medoo->get("notes", [
+            "note_id",
+            "name",
         ], [
-            "user_id" => $user_id
+            "note_id" => $note_id
         ]);
 
-        if (!$user) {
-            throw new Exception("User #$user not found!");
+        if (!$note) {
+            throw new Exception("Note #$note_id not found!");
         }
 
         if ($this->request->getMethod() === 'GET') {
-            return $this->render("groups-remove-user.twig", [
+            return $this->render("groups-remove-note.twig", [
                 "group" => $group,
-                "removeUser" => $user
+                "note" => $note
             ]);
         }
 
         // Delete
-        $this->medoo->delete("members", [
+        $this->medoo->delete("notes_sharing", [
             "group_id" => $group_id,
-            "user_id" => $user_id
+            "note_id" => $note_id
         ]);
 
-        // Forward to group settings
-        return $this->response->withHeader("Location", RouteContext::fromRequest($this->request)->getRouteParser()->fullUrlFor($this->request->getUri() ,"Groups Settings", [
+        // Forward to group view
+        return $this->response->withHeader("Location", RouteContext::fromRequest($this->request)->getRouteParser()->fullUrlFor($this->request->getUri() ,"Groups View", [
             "group_id" => $group_id,
             "group_name" => $group["sname"]
         ]))->withStatus(302);

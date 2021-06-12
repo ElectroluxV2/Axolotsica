@@ -9,6 +9,7 @@ use App\Actions\Groups\GroupsCreateAction;
 use App\Actions\Groups\GroupsDeleteAction;
 use App\Actions\Groups\GroupsJoinAction;
 use App\Actions\Groups\GroupsListAction;
+use App\Actions\Groups\GroupsRemoveNoteAction;
 use App\Actions\Groups\GroupsRemoveUserAction;
 use App\Actions\Groups\GroupsSettingsAction;
 use App\Actions\Groups\GroupsShareAction;
@@ -44,7 +45,9 @@ return function (App $app) {
 
         $groups->map(['POST', 'GET'],'/settings/{group_id}/{group_name}', GroupsSettingsAction::class)->setName('Groups Settings');
 
-        $groups->map(['POST', 'GET'],'/remove/{group_id}/{user_id}', GroupsRemoveUserAction::class)->setName('Groups Remove User');
+        $groups->map(['POST', 'GET'],'/remove-user/{group_id}/{user_id}', GroupsRemoveUserAction::class)->setName('Groups Remove User');
+
+        $groups->map(['POST', 'GET'],'/remove-note/{group_id}/{note_id}', GroupsRemoveNoteAction::class)->setName('Groups Remove Note');
 
         $groups->get('/view/{group_id}/{group_name}', GroupsViewAction::class)->setName('Groups View');
 
