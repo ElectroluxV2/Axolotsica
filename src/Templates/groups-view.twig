@@ -37,7 +37,11 @@
                 {% for note in notes %}
                     <div class="col-sm-4 mb-4">
                         <div class="card bg-info">
-                            <h5 class="card-header"><a href="{{ full_url_for('Notes View', { 'note_id': note.note_id, 'note_name': note.name }) }}">{{ note.name }}</a><br/><a href="{{ full_url_for('Groups Remove Note', { 'group_id': group.group_id, 'note_id': note.note_id }) }}" class="btn btn-danger m-3">Remove access from this group</a>
+                            <h5 class="card-header">
+                                <a href="{{ full_url_for('Notes View', { 'note_id': note.note_id, 'note_name': note.name }) }}">{{ note.name }}</a><br/>
+                                {% if group.owner_id == user.user_id %}
+                                <a href="{{ full_url_for('Groups Remove Note', { 'group_id': group.group_id, 'note_id': note.note_id }) }}" class="btn btn-danger m-3">Remove access from this group</a>
+                                {% endif %}
                             </h5>
                             <div class="card-body m-2">
                                 <div class="card-text">{{ note.content | raw }}</div>
